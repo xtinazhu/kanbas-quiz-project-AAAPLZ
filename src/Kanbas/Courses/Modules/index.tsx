@@ -1,7 +1,7 @@
 export default function Modules() {
   return (
     <div>
-      {/* Implement Collapse All button, View Progress button, etc. */}
+      <h2>Modules</h2>
       <button id="wd-all-good" onClick={() => alert("Life is Good!")} type="button">
         Collapse All
       </button> <button id="wd-all-good" onClick={() => alert("Life is Good!")} type="button">
