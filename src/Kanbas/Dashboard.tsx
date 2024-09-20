@@ -8,7 +8,7 @@ export default function Dashboard() {
         <div className="wd-dashboard-course">
           <Link className="wd-dashboard-course-link"
                 to="/Kanbas/Courses/1234/Home">
-            <img src="/images/reactjs.jpg" width={200} alt=""/>
+            <img src="/images/reactjs.jpg" width={200} />
             <div>
               <h5>
                  CS1234 React JS {/* Course 1 */}
@@ -24,7 +24,7 @@ export default function Dashboard() {
         <div className="wd-dashboard-course">
           <Link className="wd-dashboard-course-link"
                 to="/Kanbas/Courses/5010/Home">
-            <img src="/images/5010.jpg" width={200} alt=""/>
+            <img src="/images/5010.jpg" width={200} />
             <div>
               <h5>
                  CS5010 Programming Design Paradigm	{/* Course 2 */}
@@ -40,7 +40,7 @@ export default function Dashboard() {
         <div className="wd-dashboard-course">
           <Link className="wd-dashboard-course-link"
                 to="/Kanbas/Courses/5800/Home">
-            <img src="/images/5800.jpg" width={200} alt=""/>
+            <img src="/images/5800.jpg" width={200} />
             <div>
               <h5>
                  CS5800 Algorithms {/* Course 3 */}
@@ -56,7 +56,7 @@ export default function Dashboard() {
         <div className="wd-dashboard-course">
           <Link className="wd-dashboard-course-link"
                 to="/Kanbas/Courses/5400/Home">
-            <img src="/images/5400.jpg" width={200} alt=""/>
+            <img src="/images/5400.jpg" width={200} />
             <div>
               <h5>
                  CS5400 Principles of Programming Language {/* Course 4 */}
@@ -72,7 +72,7 @@ export default function Dashboard() {
         <div className="wd-dashboard-course">
           <Link className="wd-dashboard-course-link"
                 to="/Kanbas/Courses/5500/Home">
-            <img src="/images/5500.jpg" width={200} alt=""/>
+            <img src="/images/5500.jpg" width={200} />
             <div>
               <h5>
                  CS5500 Foundations of Software Engineering {/* Course 5 */}
@@ -88,7 +88,7 @@ export default function Dashboard() {
         <div className="wd-dashboard-course">
           <Link className="wd-dashboard-course-link"
                 to="/Kanbas/Courses/5520/Home">
-            <img src="/images/5520.jpg" width={200} alt=""/>
+            <img src="/images/5520.jpg" width={200} />
             <div>
               <h5>
                  CS5520 Mobile Application Development {/* Course 6 */}
@@ -104,7 +104,7 @@ export default function Dashboard() {
         <div className="wd-dashboard-course">
           <Link className="wd-dashboard-course-link"
                 to="/Kanbas/Courses/5600/Home">
-            <img src="/images/5600.jpg" width={200} alt=""/>
+            <img src="/images/5600.jpg" width={200} />
             <div>
               <h5>
                  CS5600 Computer Systems {/* Course 7 */}
