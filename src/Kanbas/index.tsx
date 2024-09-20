@@ -7,6 +7,7 @@ export default function Kanbas() {
   return (
     <div id="wd-kanbas">
       <h1>Yihua Zhu 20593</h1>
+      <h3>GitHub: https://a1--1-kanbas-react-web-app-a1.netlify.app/#/Kanbas/Account/Signin</h3>
       <h1>Kanbas</h1>
       <table>
         <tr>
