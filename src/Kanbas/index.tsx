@@ -6,7 +6,7 @@ import Courses from "./Courses";
 export default function Kanbas() {
   return (
     <div id="wd-kanbas">
-      <h1>Yihua Zhu</h1>
+      <h1>Yihua Zhu 20593</h1>
       <h1>Kanbas</h1>
       <table>
         <tr>
