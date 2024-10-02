@@ -16,7 +16,7 @@ export default function BootstrapForms() {
                     rows={3}></textarea>
         </div></div>
 
-        <div id="wd-css-styling-dropdowns"> {/* Styling Dropdowns */}
+        <div id="wd-css-styling-dropdowns"> {/* Dropdowns */}
           <h3>Dropdowns</h3>
           <select className="form-select">
             <option selected>Open this select menu</option>
@@ -26,7 +26,7 @@ export default function BootstrapForms() {
           </select>
         </div>
 
-        <div id="wd-css-styling-switches">
+        <div id="wd-css-styling-switches"> {/* Swithches */}
           <h3>Switches</h3>
           <div className="form-check form-switch">
             <input className="form-check-input" type="checkbox" 
@@ -65,6 +65,20 @@ export default function BootstrapForms() {
           </label>
           <input type="range" className="form-range"
             min="0" max="5" step="0.5" id="range1" />
+        </div>
+
+        <div id="wd-css-styling-addons"> {/* Addons */}
+          <h3>Addons</h3>
+          <div className="input-group mb-3">
+            <span className="input-group-text">$</span>
+            <span className="input-group-text">0.00</span>
+            <input type="text" className="form-control" />
+          </div>
+          <div className="input-group">
+            <input type="text" className="form-control" />
+            <span className="input-group-text">$</span>
+            <span className="input-group-text">0.00</span>
+          </div>
         </div>
 
       </div>
