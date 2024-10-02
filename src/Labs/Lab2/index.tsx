@@ -15,6 +15,8 @@
 }*/
 
 import "./index.css";
+import ForegroundColors from './ForegroundColors';
+import BackgroundColors from './BackgroundColors';
 export default function Lab2() {
   return (
     <div id="wd-lab2">
@@ -69,6 +71,9 @@ Here's another paragraph using a different ID and a different look and
           </div>
         </div>
       </div>
+
+      <ForegroundColors />
+      <BackgroundColors />
 
     </div>
   );
