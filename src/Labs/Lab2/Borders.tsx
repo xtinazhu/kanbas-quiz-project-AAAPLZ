@@ -1,4 +1,4 @@
-export default function Signin() {
+export default function Borders() {
   return (
     <div id="wd-css-borders">
       <h2>Borders</h2>

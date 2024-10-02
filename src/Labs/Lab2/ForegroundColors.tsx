@@ -1,4 +1,4 @@
-export default function Signin() {
+export default function ForegroundColors() {
   return (
     <div id="wd-css-colors">
       <h2>Colors</h2>
