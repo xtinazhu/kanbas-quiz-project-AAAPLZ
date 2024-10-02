@@ -21,6 +21,7 @@ import Borders from './Borders';
 import Padding from './Padding';
 import Margins from './Margins';
 import Corners from './Corners';
+import Dimensions from './Dimensions';
 export default function Lab2() {
   return (
     <div id="wd-lab2">
@@ -82,6 +83,7 @@ Here's another paragraph using a different ID and a different look and
       <Padding />
       <Margins />
       <Corners />
+      <Dimensions />
 
     </div>
   );
