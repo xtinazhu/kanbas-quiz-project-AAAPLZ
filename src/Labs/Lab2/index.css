@@ -25,12 +25,14 @@
   color: blue;
 }
 
+/* foreground color */
 .wd-fg-color-black { color: black; }
 .wd-fg-color-white { color: white; }
 .wd-fg-color-blue { color: #7070ff; }
 .wd-fg-color-red { color: #ff7070; }
 .wd-fg-color-green { color: green; }
 
+/* background color */
 .wd-bg-color-yellow {
   background-color: #ffff07;
 }
@@ -47,6 +49,7 @@
    background-color: lightgray;
 }
 
+/* borders */
 .wd-border-fat {
   border-width: 20px 30px 20px 30px; }
 .wd-border-thin {
@@ -62,6 +65,7 @@
 .wd-border-blue {
   border-color: #7070ff; }
 
+/* padding */
 .wd-padded-top-left {
   padding-top: 50px;
   padding-left: 50px;
@@ -74,6 +78,7 @@
   padding: 50px;
 }
 
+/* margins */
 .wd-margin-bottom {
   margin-bottom: 50px;
 }
@@ -85,6 +90,7 @@
   margin: 30px;
 }
 
+/* corners */
 .wd-rounded-corners-top {
   border-top-left-radius: 40px;
   border-top-right-radius: 40px;
@@ -100,6 +106,7 @@
   border-radius: 30px 0px 20px 50px;
 }
 
+/* dimensions */
 .wd-dimension-portrait {
   width: 75px;
   height: 100px;
@@ -113,6 +120,7 @@
   height: 75px;
 }
 
+/* relative position */
 .wd-pos-relative-nudge-up-right {
   position: relative;
   bottom: 30px;
@@ -127,6 +135,7 @@
   position: relative;
 }
 
+/* absolute position */
 .wd-pos-absolute-10-10 {
   position: absolute;
   top: 10px;
@@ -143,8 +152,14 @@
   left: 120px;
 }
 
+/* fixed position */
 .wd-pos-fixed {
   position: fixed;
   right: 0px;
   bottom: 50%;
+}
+
+/* Z-index */
+.wd-zindex-bring-to-front {
+  z-index: 10;
 }
