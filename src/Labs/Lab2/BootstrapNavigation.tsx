@@ -17,7 +17,7 @@ export default function BootstrapNavigation() {
               <a className="nav-link disabled" href="#">Disabled</a>
           </li>
         </ul>
-      </div>
+      </div> <br />
 
       <div id="wd-css-navigating-with-cards"> {/* Navigating with cards */}
         <h2>Cards</h2>

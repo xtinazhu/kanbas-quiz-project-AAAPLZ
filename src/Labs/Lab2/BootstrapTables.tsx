@@ -16,7 +16,7 @@ export default function BootstrapTables() {
             <tr className="table-success"><td colSpan={3}>Average</td><td>90</td></tr>
           </tfoot>
         </table>
-      </div>
+      </div> <br />
 
       <div id="wd-css-responsive-tables"> {/* responsive table */}
         <h2>Responsive tables</h2>

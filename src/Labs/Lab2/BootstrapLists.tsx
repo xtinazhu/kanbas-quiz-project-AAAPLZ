@@ -10,7 +10,7 @@ export default function BootstrapLists() {
           <li className="list-group-item">Lord of the Ring</li>
           <li className="list-group-item disabled">Star Wars</li>
         </ul>
-      </div>
+      </div> <br />
 
       <div id="wd-css-hyperlink-list">
         <h3>Favorite books</h3>

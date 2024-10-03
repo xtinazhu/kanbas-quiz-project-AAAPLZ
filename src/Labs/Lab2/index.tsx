@@ -45,7 +45,7 @@ export default function Lab2() {
         right on the element. Although it's very convenient
         it is considered bad practice and you should avoid
         using the style attribute
-      </p>
+      </p> <br />
 
       <div id="wd-css-id-selectors">
         <h3>ID selectors</h3>
@@ -57,7 +57,7 @@ elements of the same name, e.g., P, we can refer to a specific element by its ID
 Here's another paragraph using a different ID and a different look and
           feel
         </p>
-      </div>
+      </div> <br />
 
       <div id="wd-css-class-selectors">
         <h3>Class selectors</h3>
@@ -67,7 +67,7 @@ Here's another paragraph using a different ID and a different look and
         <h4 className="wd-class-selector">
       This heading has same style as paragraph above
         </h4>
-      </div>
+      </div> <br />
 
       <div id="wd-css-document-structure">
         <div className="wd-selector-1">
@@ -87,29 +87,29 @@ Here's another paragraph using a different ID and a different look and
                 styles depending on the document structure
             </p>
           </div>
-        </div>
+        </div> <br />
       </div>
 
-      <ForegroundColors />
-      <BackgroundColors />
-      <Borders />
-      <Padding />
-      <Margins />
-      <Corners />
-      <Dimensions />
-      <Positions />
-      <Zindex />
-      <Float />
-      <GridLayout />
-      <Flex />
-      <ReactIcons />
+      <ForegroundColors /> <br />
+      <BackgroundColors /> <br />
+      <Borders /> <br />
+      <Padding /> <br />
+      <Margins /> <br />
+      <Corners /> <br />
+      <Dimensions /> <br />
+      <Positions /> <br />
+      <Zindex /> <br />
+      <Float /> <br />
+      <GridLayout /> <br />
+      <Flex /> <br />
+      <ReactIcons /> <br />
 
-      <BootstrapGrids />
-      <ScreenSizeLabel />
-      <BootstrapTables />
-      <BootstrapLists />
-      <BootstrapForms />
-      <BootstrapNavigation />
+      <BootstrapGrids /> <br />
+      <ScreenSizeLabel /> <br />
+      <BootstrapTables /> <br />
+      <BootstrapLists /> <br />
+      <BootstrapForms /> <br />
+      <BootstrapNavigation /> <br />
 
     </div>
   );
