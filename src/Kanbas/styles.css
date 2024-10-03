@@ -28,3 +28,15 @@ body * {  font-family: Arial, Helvetica, sans-serif;  }
 .wd-lesson {
   border-left: 3px solid green !important;
 }
+
+/* round cornor */
+.wd-rounded-corners-all-around {
+  border-radius: 50px;
+}
+.wd-padding-fat {
+  padding: 3px;
+}
+.wd-border-thin {
+  border-width: 1px; }
+.wd-border-solid {
+  border-style: solid; }
