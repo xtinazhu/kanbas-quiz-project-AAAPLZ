@@ -36,7 +36,7 @@ export default function Profile() {
 
       <Link id="wd-signin-btn"
             to="/Kanbas/Account/Signin"
-            className="btn btn-primary w-100">
+            className="btn btn-primary w-100 red-btn">
             Signout </Link>
     </div>
 );}
