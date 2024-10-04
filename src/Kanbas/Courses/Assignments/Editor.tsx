@@ -1,130 +1,126 @@
+import { RxCross2 } from "react-icons/rx";
 export default function AssignmentEditor() {
   return (
-    <div id="wd-assignments-editor">
-      <h2>Assignment Name</h2>
+    <div id="wd-assignments-editor" className="kb-margin-right-left kb-padded-bottom-right kb-border-fat">
+      <div className="row">Assignment Name</div>
+
+      <div className="row">
+        <input id="wd-name" className="col-12 kb-input-height" value="A1" />
+      </div><br />
       
-      <input id="wd-name" value="A1 - ENV + HTML" /><br /><br />
-      <textarea id="wd-description">
-        The assignment is available online Submit a link to the landing page of your Web application running on Netlify. The landing page should include the following: Your full name and section Links to each of the lab assignment Link to the Kanbas application Links to all relevant source code repositories.
-      </textarea>
-      <br />
-      <table>
-        <tr>
-          <td align="right" valign="top">
-            <label htmlFor="wd-points">Points</label>
-          </td>
-          <td>
-            <input id="wd-points" value={100} />
-          </td>
-        </tr>
-        <br />
-        
-        <tr>
-          <td align="right" valign="top">
-            <label htmlFor="wd-group">Assignment Group</label>
-          </td>
-          <td>
-            <select id="wd-group">
-              <option value="ASSIGNMENTS">ASSIGNMENTS</option>
-            </select>
-          </td>
-        </tr>
-        <br />
+      <div className="row">
+        <textarea id="wd-description" className="col-12 kb-textarea-height">
+          The assignment is available online. 
+          Submit a link to the landing page of your Web application running on Netlify. 
+          The landing page should include the following: Your full name and section Links to each of the 
+          lab assignment Link to the Kanbas application Links to all relevant source code repositories.
+        </textarea>
+      </div><br />
 
-        <tr>
-          <td align="right" valign="top">
-            <label htmlFor="wd-display-grade-as">Display Grade as</label>
-          </td>
-          <td>
-            <select id="wd-display-grade-as">
-              <option value="Percentage">Percentage</option>
-              <option value="Numeric">Numeric</option>
-            </select>
-          </td>
-        </tr>
+      <div className="row">
+        <div className="col-4 kb-textalign-center-right">
+          Points&nbsp;
+        </div>
+        <input id="wd-name" className="col-8 kb-input-height" value="100" />
+      </div><br />
 
-        <tr>
-          <td align="right" valign="top">
-            <label htmlFor="wd-submission-type">Submission Type</label>
-          </td>
-          <td>
-            <select id="wd-submission-type">
+      <div className="row">
+        <div className="col-4 kb-textalign-center-right">
+          Assignment Group&nbsp;
+        </div>
+          <select id="wd-group" className="col-8 kb-input-height">
+            <option value="ASSIGNMENTS">ASSIGNMENTS</option>
+          </select>
+      </div><br />
+
+      <div className="row">
+        <div className="col-4 kb-textalign-center-right">
+          Display Grade as&nbsp;
+        </div>
+          <select id="wd-group" className="col-8 kb-input-height">
+            <option value="Percentage">Percentage</option>
+          </select>
+      </div><br />
+
+      <div className="row">
+        <div className="col-4 kb-textalign-center-right">
+          Submission Type&nbsp;
+        </div>
+        <div className="col-8  kb-border-thin wd-border-solid">
+          <div className="kb-assignment-editor-margin-all-around">
+            <select id="wd-group" className="col-12 kb-input-height">
               <option value="Online">Online</option>
-              <option value="In Class">In Class</option>
             </select>
-          </td>
-        </tr>
-        <br />
+            <br /><br />
+            <label htmlFor="wd-submission-type">
+              <h5>Online Entry Option</h5></label><br /><br />
+              <input type="checkbox" name="check-online-Options" id="wd-text-entry"/>
+              <label htmlFor="wd-text-entry">&nbsp;Text Entry</label><br/><br/>
 
-        <tr>
-          <td>
-          </td>
-          <td align="left" valign="top">
-            <label htmlFor="wd-submission-type">Online Entry Option</label><br />
-            <input type="checkbox" name="check-online-Options" id="wd-text-entry"/>
-            <label htmlFor="wd-text-entry">Text Entry</label><br/>
+              <input type="checkbox" name="check-online-Options" id="wd-website-url"/>
+              <label htmlFor="wd-website-url">&nbsp;Website URL</label><br/><br/>
 
-            <input type="checkbox" name="check-online-Options" id="wd-website-url"/>
-            <label htmlFor="wd-website-url">Website URL</label><br/>
+              <input type="checkbox" name="check-online-Options" id="wd-media-recordings"/>
+              <label htmlFor="wd-media-recordings">&nbsp;Media Recordings</label><br/><br/>
 
-            <input type="checkbox" name="check-online-Options" id="wd-media-recordings"/>
-            <label htmlFor="wd-media-recordings">Media Recordings</label><br/>
+              <input type="checkbox" name="check-online-Options" id="wd-student-annotation"/>
+              <label htmlFor="wd-student-annotation">&nbsp;Student Annotation</label><br/><br/>
 
-            <input type="checkbox" name="check-online-Options" id="wd-student-annotation"/>
-            <label htmlFor="wd-student-annotation">Student Annotation</label><br/>
+              <input type="checkbox" name="check-online-Options" id="wd-file-upload"/>
+              <label htmlFor="wd-file-upload">&nbsp;File Uploads</label>
+            </div>
+        </div>
+      </div><br />
 
-            <input type="checkbox" name="check-online-Options" id="wd-file-upload"/>
-            <label htmlFor="wd-file-upload">File Uploads</label>
-          </td>
-        </tr>
-        <br />
+      <div className="row">
+        <div className="col-4 kb-textalign-center-right">
+          Assign&nbsp;
+        </div>
+        <div className="col-8  kb-border-thin wd-border-solid">
+          <div className="kb-assignment-editor-margin-all-around">
+            <h5>Assign to</h5>
+            <div className="row col-12  kb-border-thin wd-border-solid kb-assign-margin">
+              <div className="row col-3 bg-secondary text-black kb-input-margin">
+                <div>Everyone</div>
+                <div className="float-end"><RxCross2 /></div>
+              </div>
+            </div><br />
+            
+            <h5>Due</h5>
+            <div className="row col-12  kb-border-thin wd-border-solid kb-assign-margin">
+              <input type="datetime-local" id="wd-due-date" name="dateTimeInput" value="2024-05-13 23:59"></input>
+            </div><br />
 
-        <tr>
-          <td align="right" valign="top">
-            <label>Assign</label>
-          </td>
-          <td align="left" valign="top">
-            <label htmlFor="wd-assign-to">Assign to</label><br />
-            <input id="wd-assign-to" value={"Everyone"} />
-          </td>
-        </tr>
-        <br />
-
-        <tr>
-          <td></td>
-          <td align="left" valign="top">
-            <label htmlFor="wd-due-date">Due</label><br />
-            <input type="date" id="wd-due-date" value="05-20-2024"/>
-          </td>
-        </tr>
-        <br />
-
-        <tr>
-          <td></td>
-          <td align="left" valign="top">
-            <label htmlFor="wd-available-from">Available from</label><br />
-            <input type="date" id="wd-available-from" value="05-06-2024"/>
-          </td>
-          <td align="left" valign="top">
-            <label htmlFor="wd-available-until">Until</label><br />
-            <input type="date" id="wd-available-until" value="05-20-2024"/>
-          </td>
-        </tr>
-        <br />
-      </table>
+            <div className="row">
+              <div className="col-6">
+                <h5>Available from</h5>
+              </div>
+              <div className="col-6">
+                <h5>Unitl</h5>
+              </div>
+            </div>
+            <div className="row kb-assign-margin">
+              <div className="col-5 kb-border-thin wd-border-solid">
+                <input type="datetime-local" id="wd-available-from" name="dateTimeInput" value="2024-05-13 23:59"></input>
+              </div><br />
+              <div className="col-5 kb-border-thin wd-border-solid kb-assign-margin-left">
+                <input type="datetime-local" id="wd-available-from" name="dateTimeInput" value="2024-05-13 23:59"></input>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div><br />
 
       <hr />
-      <table>
-        <tr>
-          <td> </td>
-          <td> </td>
-          <td> </td>
-          <td> </td>
-          <td>
-            <button>Cancel</button> <button>Save</button>
-          </td>
-        </tr>
 
-      </table>
+      <div><div id="wd-assignment-controls" className="text-nowrap">
+      <button id="wd-add-module-btn" className="btn btn-lg btn-danger me-1 float-end">
+        Save</button>
+
+      <button id="wd-add-module-btn" className="btn btn-lg btn-secondary me-1 float-end">
+        Cancel</button>
+      </div></div>
+
     </div>
 );}

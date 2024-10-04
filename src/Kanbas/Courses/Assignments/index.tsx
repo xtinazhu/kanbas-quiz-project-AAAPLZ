@@ -9,8 +9,8 @@ export default function Assignments() {
       <AssignmentControls /><br /><br /><br />
       <div id="wd-assignments">
 
-        <ul id="wd-modules" className="list-group rounded-0">
-          <li className="wd-module list-group-item p-0 mb-5 fs-5 border-gray">
+        <ul id="wd-assignment" className="list-group rounded-0">
+          <li className="wd-assignment list-group-item p-0 mb-5 fs-5 border-gray">
             <div className="wd-title p-3 ps-2 bg-secondary"> 
               <BsGripVertical className="me-2 fs-3" />
               <b>ASSIGNMENTS</b>
@@ -23,9 +23,12 @@ export default function Assignments() {
                   <BsGripVertical className="me-2 fs-4" />
                   <FaRegPenToSquare className="me-2 fs-4" />
                 </div>
-                <div className="d-flex flex-column flex-grow-1 ms-3">
-                  <b>A1</b>
-                  <div>
+                <div id="wd-assignment-list" className="d-flex flex-column flex-grow-1 ms-3">
+                  <a className="wd-assignment-link"
+                    href="#/Kanbas/Courses/1234/Assignments/A1">
+                    <b>A1</b>
+                  </a>
+                  <div style={{ fontSize: '1rem' }}>
                     <span className="text-danger">Multiple Modules</span>
                     <span className="mx-2">|</span>
                     <b>Not available until</b> May 6 at 12:00 am
@@ -38,14 +41,17 @@ export default function Assignments() {
                 </div>
               </li>
 
-              <li className="wd-lesson list-group-item p-3 ps-1 d-flex align-items-center justify-content-between">
+              <li className="wd-assignment list-group-item p-3 ps-1 d-flex align-items-center justify-content-between">
                 <div>
                   <BsGripVertical className="me-2 fs-4" />
                   <FaRegPenToSquare className="me-2 fs-4" />
                 </div>
                 <div className="d-flex flex-column flex-grow-1 ms-3">
-                  <b>A2</b>
-                  <div>
+                  <a className="wd-assignment-link"
+                    href="#/Kanbas/Courses/1234/Assignments/A2">
+                    <b>A2</b>
+                  </a>
+                  <div style={{ fontSize: '1rem' }}>
                     <span className="text-danger">Multiple Modules</span>
                     <span className="mx-2">|</span>
                     <b>Not available until</b> May 13 at 12:00 am
@@ -58,14 +64,17 @@ export default function Assignments() {
                 </div>
               </li>
 
-              <li className="wd-lesson list-group-item p-3 ps-1 d-flex align-items-center justify-content-between">
+              <li className="wd-assignment list-group-item p-3 ps-1 d-flex align-items-center justify-content-between">
                 <div>
                   <BsGripVertical className="me-2 fs-4" />
                   <FaRegPenToSquare className="me-2 fs-4" />
                 </div>
                 <div className="d-flex flex-column flex-grow-1 ms-3">
-                  <b>A3</b>
-                  <div>
+                  <a className="wd-assignment-link"
+                    href="#/Kanbas/Courses/1234/Assignments/A3">
+                    <b>A3</b>
+                  </a>
+                  <div style={{ fontSize: '1rem' }}>
                     <span className="text-danger">Multiple Modules</span>
                     <span className="mx-2">|</span>
                     <b>Not available until</b> May 20 at 12:00 am
