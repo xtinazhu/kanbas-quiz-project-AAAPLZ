@@ -21,6 +21,7 @@ import ForLoops from "./ForLoops";
 import MapFunction from "./MapFunction";
 import FindFunction from "./FindFunction";
 import FindIndex from "./FindIndex";
+import FilterFunction from "./FilterFunction";
 
 export default function Lab3() {
   return (
@@ -38,7 +39,7 @@ export default function Lab3() {
       <ArrowFunctions/>
       <ImpliedReturn/>
       <TemplateLiterals/>
-      
+
       <SimpleArrays/>
       <ArrayIndexAndLength/>
       <AddingAndRemovingToFromArrays/>
@@ -46,6 +47,7 @@ export default function Lab3() {
       <MapFunction/>
       <FindFunction/>
       <FindIndex/>
+      <FilterFunction/>
     </div>
   );
 }
