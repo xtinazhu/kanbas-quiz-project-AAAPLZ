@@ -33,6 +33,7 @@ import DestructingImports from "./DestructingImports";
 // Dynamic Styling
 import Classes from "./Classes";
 import Styles from "./Styles";
+import Add from "./Add";
 
 export default function Lab3() {
   return (
@@ -69,6 +70,7 @@ export default function Lab3() {
       
       <Classes/>
       <Styles/>
+      <Add a={3} b={4} />
     </div>
   );
 }
