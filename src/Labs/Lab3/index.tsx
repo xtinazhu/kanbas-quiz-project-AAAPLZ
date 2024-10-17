@@ -32,6 +32,7 @@ import DestructingImports from "./DestructingImports";
 
 // Dynamic Styling
 import Classes from "./Classes";
+import Styles from "./Styles";
 
 export default function Lab3() {
   return (
@@ -67,6 +68,7 @@ export default function Lab3() {
       <DestructingImports/>
       
       <Classes/>
+      <Styles/>
     </div>
   );
 }
