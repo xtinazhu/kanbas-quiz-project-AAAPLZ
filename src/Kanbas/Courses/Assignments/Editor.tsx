@@ -1,15 +1,54 @@
 import { RxCross2 } from "react-icons/rx";
+
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import * as db from "../../Database";
 export default function AssignmentEditor() {
+  const { cid, aid, description , points, due , available_from , available_until } = useParams();
+  const navigate = useNavigate();
+  const assignments = db.assignments;
+  const [assignment, setAssignment] = useState<any>(null);
+
+  useEffect(() => {
+    // Find the assignment by its ID and ensure the course ID matches
+    const selectedAssignment = assignments.find((a: any) => a._id === aid && a.course === cid);
+    setAssignment(selectedAssignment);
+  }, [aid, cid, assignments]);
+  
+
+  const handleSave = () => {
+    // Create a new updated assignment object
+    const updatedAssignment = {
+      ...assignment,
+      aid: aid,
+      description: description,
+      points: points,
+      due: due,
+      available_from: available_from,
+      available_until: available_until
+    };
+
+    // Update the assignment in the database
+    const assignmentIndex = assignments.findIndex((a: any) => a._id === aid);
+    if (assignmentIndex > -1) {
+      assignments[assignmentIndex] = updatedAssignment;
+    }
+
+    // Redirect back to the assignments list page after saving
+    navigate(`/Kanbas/Courses/${cid}/Assignments`);
+  };
+
+
   return (
     <div id="wd-assignments-editor" className="kb-margin-right-left kb-padded-bottom-right kb-border-fat">
       <div className="row">Assignment Name</div>
 
       <div className="row">
-        <input id="wd-name" className="col-12 kb-input-height" value="A1" />
+        <input id="wd-name" className="col-12 kb-input-height" value={aid} />
       </div><br />
       
       <div className="row">
-        <textarea id="wd-description" className="col-12 kb-textarea-height">
+      <textarea id="wd-description" className="col-12 kb-textarea-height">
           The assignment is available online. 
           Submit a link to the landing page of your Web application running on Netlify. 
           The landing page should include the following: Your full name and section Links to each of the 
@@ -21,7 +60,7 @@ export default function AssignmentEditor() {
         <div className="col-4 kb-textalign-center-right">
           Points&nbsp;
         </div>
-        <input id="wd-name" className="col-8 kb-input-height" value="100" />
+        <input id="wd-name" className="col-8 kb-input-height" value={points || "100"} />
       </div><br />
 
       <div className="row">
@@ -101,7 +140,7 @@ export default function AssignmentEditor() {
             </div>
             <div className="row kb-assign-margin">
               <div className="col-5 kb-border-thin wd-border-solid">
-                <input type="datetime-local" id="wd-available-from" name="dateTimeInput" value="2024-05-13 23:59"></input>
+                <input type="datetime-local" id="wd-available-from" name="dateTimeInput" value="2024-05-03 23:59"></input>
               </div><br />
               <div className="col-5 kb-border-thin wd-border-solid kb-assign-margin-left">
                 <input type="datetime-local" id="wd-available-from" name="dateTimeInput" value="2024-05-13 23:59"></input>
@@ -115,10 +154,10 @@ export default function AssignmentEditor() {
       <hr />
 
       <div><div id="wd-assignment-controls" className="text-nowrap">
-      <button id="wd-add-module-btn" className="btn btn-lg btn-danger me-1 float-end">
+      <button id="wd-add-module-btn" className="btn btn-lg btn-danger me-1 float-end" onClick={handleSave} >
         Save</button>
 
-      <button id="wd-add-module-btn" className="btn btn-lg btn-secondary me-1 float-end">
+      <button id="wd-add-module-btn" className="btn btn-lg btn-secondary me-1 float-end" onClick={() => navigate(`/Kanbas/Courses/${cid}/Assignments`)} >
         Cancel</button>
       </div></div>
 
