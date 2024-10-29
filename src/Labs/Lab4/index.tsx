@@ -1,6 +1,7 @@
 import ClickEvent from "./ClickEvent";
 import PassingDataOnEvent from "./PassingDataOnEvent";
 import PassingFunctions from "./PassingFunctions";
+import EventObject from "./EventObject";
 
 export default function Lab4() {
   //passing functions
@@ -12,8 +13,9 @@ export default function Lab4() {
     <div id="wd-lab3">
       <h3>Lab 4</h3>
       <ClickEvent/>
-      <PassingDataOnEvent/>
+      <PassingDataOnEvent />
       <PassingFunctions theFunction={sayHello} />
+      <EventObject />
     </div>
   );
 }
