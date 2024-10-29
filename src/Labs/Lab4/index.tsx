@@ -7,6 +7,7 @@ import BooleanStateVariables from "./BooleanStateVariables";
 import StringStateVariables from "./StringStateVariables";
 import DateStateVariable from "./DateStateVariable";
 import ObjectStateVariable from "./ObjectStateVariable";
+import ArrayStateVariable from "./ArrayStateVariable";
 
 export default function Lab4() {
   //passing functions
@@ -15,8 +16,8 @@ export default function Lab4() {
   }
 
   return (
-    <div id="wd-lab3">
-      <h3>Lab 4</h3>
+    <div id="wd-lab4" className="container">
+      <h2>Lab 4</h2><br />
       <ClickEvent/>
       <PassingDataOnEvent />
       <PassingFunctions theFunction={sayHello} />
@@ -26,6 +27,7 @@ export default function Lab4() {
       <StringStateVariables />
       <DateStateVariable />
       <ObjectStateVariable />
+      <ArrayStateVariable />
     </div>
   );
 }
