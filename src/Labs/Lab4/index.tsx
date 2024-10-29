@@ -4,6 +4,7 @@ import PassingFunctions from "./PassingFunctions";
 import EventObject from "./EventObject";
 import Counter from "./Counter";
 import BooleanStateVariables from "./BooleanStateVariables";
+import StringStateVariables from "./StringStateVariables";
 
 export default function Lab4() {
   //passing functions
@@ -20,6 +21,7 @@ export default function Lab4() {
       <EventObject />
       <Counter />
       <BooleanStateVariables />
+      <StringStateVariables />
     </div>
   );
 }
