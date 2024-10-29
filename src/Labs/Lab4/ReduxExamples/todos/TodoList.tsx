@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import TodoForm from "./TodoForm";
+import TodoItem from "./TodoItem";
 export default function TodoList() {
   const [todos, setTodos] = useState([
     { id: "1", title: "Learn React" },
@@ -24,6 +26,19 @@ export default function TodoList() {
     <div>
       <h2>Todo List</h2>
       <ul className="list-group">
+        <TodoForm
+          todo={todo}
+          setTodo={setTodo}
+          addTodo={addTodo}
+          updateTodo={updateTodo}/>
+        {todos.map((todo) => (
+          <TodoItem
+            todo={todo}
+            deleteTodo={deleteTodo}
+            setTodo={setTodo} />
+        ))}
+      </ul>
+      {/*<ul className="list-group">
         <li className="list-group-item">
           <button onClick={() => addTodo(todo)}
                   id="wd-add-todo-click" className="btn btn-success me-2 float-end">
@@ -49,7 +64,7 @@ export default function TodoList() {
             {todo.title}
           </li>
         ))}
-      </ul>
+      </ul>*/}
       <hr/>
     </div>
   );
