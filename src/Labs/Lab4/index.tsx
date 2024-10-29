@@ -6,6 +6,7 @@ import Counter from "./Counter";
 import BooleanStateVariables from "./BooleanStateVariables";
 import StringStateVariables from "./StringStateVariables";
 import DateStateVariable from "./DateStateVariable";
+import ObjectStateVariable from "./ObjectStateVariable";
 
 export default function Lab4() {
   //passing functions
@@ -24,6 +25,7 @@ export default function Lab4() {
       <BooleanStateVariables />
       <StringStateVariables />
       <DateStateVariable />
+      <ObjectStateVariable />
     </div>
   );
 }
