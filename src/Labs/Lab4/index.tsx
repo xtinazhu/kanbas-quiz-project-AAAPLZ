@@ -1,7 +1,10 @@
+//2.2 Handling User Events
 import ClickEvent from "./ClickEvent";
 import PassingDataOnEvent from "./PassingDataOnEvent";
 import PassingFunctions from "./PassingFunctions";
 import EventObject from "./EventObject";
+
+//2.3 Managing Component State
 import Counter from "./Counter";
 import BooleanStateVariables from "./BooleanStateVariables";
 import StringStateVariables from "./StringStateVariables";
@@ -9,6 +12,9 @@ import DateStateVariable from "./DateStateVariable";
 import ObjectStateVariable from "./ObjectStateVariable";
 import ArrayStateVariable from "./ArrayStateVariable";
 import ParentStateComponent from "./ParentStateComponent";
+
+//2.4 Managing Application State
+import ReduxExamples from "./ReduxExamples";
 
 export default function Lab4() {
   //passing functions
@@ -23,6 +29,7 @@ export default function Lab4() {
       <PassingDataOnEvent />
       <PassingFunctions theFunction={sayHello} />
       <EventObject />
+      
       <Counter />
       <BooleanStateVariables />
       <StringStateVariables />
@@ -30,6 +37,8 @@ export default function Lab4() {
       <ObjectStateVariable />
       <ArrayStateVariable />
       <ParentStateComponent />
+
+      <ReduxExamples/>
     </div>
   );
 }
