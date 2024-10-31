@@ -17,14 +17,14 @@ export default function Signin() {
   };
   return (
     <div id="wd-signin-screen" className="kb-margin-right-left">
-      <h1>Signin</h1>
+      <h1>Sign in</h1>
       <input defaultValue={credentials.username}
              onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
-             className="form-control mb-2" placeholder="username" id="wd-username" />
+             className="form-control mb-2" placeholder="username"/>
       <input defaultValue={credentials.password}
              onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-             className="form-control mb-2" placeholder="password" type="password" id="wd-password" />
-      <button onClick={signin} id="wd-signin-btn" className="btn btn-primary w-100" > Sign in </button>
-      <Link id="wd-signup-link" to="/Kanbas/Account/Signup">Signup</Link>
+             className="form-control mb-2" placeholder="password" type="password" />
+      <button onClick={signin} className="btn btn-primary w-100" > Sign in </button>
+      <Link id="wd-signup-link" to="/Kanbas/Account/Signup">Sign up</Link>
     </div>
 );}

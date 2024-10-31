@@ -6,12 +6,14 @@ import { FaRegPenToSquare } from "react-icons/fa6";
 
 import { useParams } from "react-router";
 import * as db from "../../Database";
+
+import ProtectedContent from "../../Account/ProtectedContent";
 export default function Assignments() {
   const { cid } = useParams();
   const assignment = db.assignments;
   return (
     <div className="wd-margin-left wd-padded-bottom-right wd-border-fat">
-      <AssignmentControls /><br /><br /><br />
+      <ProtectedContent><AssignmentControls /></ProtectedContent><br /><br /><br />
       <div id="wd-assignments">
 
         <ul id="wd-assignment" className="list-group rounded-0">
@@ -20,7 +22,7 @@ export default function Assignments() {
             <div className="wd-title p-3 ps-2 bg-secondary"> 
               <BsGripVertical className="me-2 fs-3" />
               <b>ASSIGNMENTS</b>
-              <AssignmentControlButtons />
+              <ProtectedContent><AssignmentControlButtons /></ProtectedContent>
             </div>
 
             <ul className="wd-lessons list-group rounded-0">
@@ -46,7 +48,7 @@ export default function Assignments() {
                   </div>
                 </div>
                 <div>
-                  <SingleAssignmentBottons />
+                  <ProtectedContent><SingleAssignmentBottons /></ProtectedContent>
                 </div>
               </li>
               ))}
