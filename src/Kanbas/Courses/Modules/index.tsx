@@ -2,11 +2,12 @@ import ModulesControls from "./ModulesControls";
 import ModuleControlButtons from "./ModuleControlButtons";
 import LessonControlButtons from "./LessonControlButtons";
 import { BsGripVertical } from 'react-icons/bs';
+import React, { useState } from "react";
 import { useParams } from "react-router";
 import * as db from "../../Database";
 export default function Modules() {
   const { cid } = useParams();
-  const modules = db.modules;
+  const [modules, setModules] = useState<any[]>(db.modules);
   return (
     <div>
       <ModulesControls /><br /><br /><br /><br />
