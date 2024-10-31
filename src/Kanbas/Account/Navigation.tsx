@@ -1,8 +1,10 @@
 import { Link , useLocation , useParams} from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function CoursesNavigation() {
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const links = currentUser ? ["Profile"] : ["Signin", "Signup"];
   const { pathname } = useLocation();
-  const links = ["Signin", "Signup", "Profile"];
   return (
     <div id="wd-account-navigation" className="wd list-group fs-5 rounded-0">
       {links.map((link) => (
