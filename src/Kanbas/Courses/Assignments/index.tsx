@@ -4,16 +4,39 @@ import AssignmentControlButtons from "./AssignmentControlBottons";
 import { BsGripVertical } from 'react-icons/bs';
 import { FaRegPenToSquare } from "react-icons/fa6";
 
+import React, { useState } from "react";
 import { useParams } from "react-router";
 import * as db from "../../Database";
 
 import ProtectedContent from "../../Account/ProtectedContent";
+
+import { addAssignment, updateAssignment, deleteAssignment }
+  from "./reducer";
+import { useSelector, useDispatch } from "react-redux";
+
 export default function Assignments() {
   const { cid } = useParams();
+  const [assignments, setAssignments] = useState<any[]>(db.assignments);
+  const [assignmentName, setAssignmentName] = useState("");
   const assignment = db.assignments;
+  //const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+  const dispatch = useDispatch();
+  const addAssignment = () => {
+    setAssignments([ ...assignments, { _id: new Date().getTime().toString(),
+                                     title: assignmentName, course: cid } ]);
+    setAssignmentName("");
+  };
+
   return (
     <div className="wd-margin-left wd-padded-bottom-right wd-border-fat">
-      <ProtectedContent><AssignmentControls /></ProtectedContent><br /><br /><br />
+      <ProtectedContent><AssignmentControls 
+      setAssignmentName={setAssignmentName} assignmentName={assignmentName}
+      addAssignment={addAssignment}/></ProtectedContent><br /><br /><br />
+      {/*<ProtectedContent><AssignmentControls setAssignmentName={setAssignmentName} assignmentName={assignmentName} 
+        addAssignment={() => {
+          dispatch(addAssignment({ name: assignmentName, course: cid }));
+          setAssignmentName("");
+        }} /></ProtectedContent><br /><br /><br />*/}
       <div id="wd-assignments">
 
         <ul id="wd-assignment" className="list-group rounded-0">

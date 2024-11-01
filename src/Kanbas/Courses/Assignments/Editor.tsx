@@ -3,7 +3,10 @@ import { RxCross2 } from "react-icons/rx";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import * as db from "../../Database";
-export default function AssignmentEditor() {
+export default function AssignmentEditor(
+  { assignmentName, setAssignmentName, addAssignment }:
+  { assignmentName: string; setAssignmentName: (name: string) => void; addAssignment: () => void; }
+) {
   const { cid, aid, description , points, due , available_from , available_until } = useParams();
   const navigate = useNavigate();
   const assignments = db.assignments;
@@ -13,7 +16,7 @@ export default function AssignmentEditor() {
     // Find the assignment by its ID and ensure the course ID matches
     const selectedAssignment = assignments.find((a: any) => a._id === aid && a.course === cid);
     setAssignment(selectedAssignment);
-  }, [aid, cid, assignments]);
+  }, [aid, cid, assignments, due , available_from , available_until]);
   
 
   const handleSave = () => {
@@ -44,11 +47,13 @@ export default function AssignmentEditor() {
       <div className="row">Assignment Name</div>
 
       <div className="row">
-        <input id="wd-name" className="col-12 kb-input-height" value={aid} />
+        <input id="wd-assignment-name" className="col-12 kb-input-height"
+          defaultValue={aid} placeholder="New Assignment"
+          onChange={(e) => setAssignmentName(e.target.value)} />
       </div><br />
       
       <div className="row">
-      <textarea id="wd-description" className="col-12 kb-textarea-height">
+      <textarea id="wd-assignment-description" className="col-12 kb-textarea-height">
           The assignment is available online. 
           Submit a link to the landing page of your Web application running on Netlify. 
           The landing page should include the following: Your full name and section Links to each of the 
@@ -60,7 +65,8 @@ export default function AssignmentEditor() {
         <div className="col-4 kb-textalign-center-right">
           Points&nbsp;
         </div>
-        <input id="wd-name" className="col-8 kb-input-height" value={points || "100"} />
+        <input id="wd-name" className="col-8 kb-input-height" 
+          value={points || "100"} />
       </div><br />
 
       <div className="row">
@@ -154,10 +160,15 @@ export default function AssignmentEditor() {
       <hr />
 
       <div><div id="wd-assignment-controls" className="text-nowrap">
-      <button id="wd-add-module-btn" className="btn btn-lg btn-danger me-1 float-end" onClick={handleSave} >
+      <button id="wd-add-module-btn" className="btn btn-lg btn-danger me-1 float-end" 
+        onClick={() => {
+          addAssignment(); 
+          navigate(`/Kanbas/Courses/${cid}/Assignments`); 
+        }} type="button">
         Save</button>
 
-      <button id="wd-add-module-btn" className="btn btn-lg btn-secondary me-1 float-end" onClick={() => navigate(`/Kanbas/Courses/${cid}/Assignments`)} >
+      <button id="wd-add-module-btn" className="btn btn-lg btn-secondary me-1 float-end" 
+        type="button" onClick={() => navigate(`/Kanbas/Courses/${cid}/Assignments`)}>
         Cancel</button>
       </div></div>
 
