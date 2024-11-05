@@ -1,6 +1,6 @@
 import AssignmentControls from "./AssignmentControls";
-import SingleAssignmentBottons from "./SingleAssignmentBottons";
-import AssignmentControlButtons from "./AssignmentControlBottons";
+import SingleAssignmentButtons from "./SingleAssignmentButtons";
+import AssignmentControlButtons from "./AssignmentControlButtons";
 import { BsGripVertical } from 'react-icons/bs';
 import { FaRegPenToSquare } from "react-icons/fa6";
 
@@ -71,7 +71,7 @@ export default function Assignments() {
                   </div>
                 </div>
                 <div>
-                  <ProtectedContent><SingleAssignmentBottons /></ProtectedContent>
+                  <ProtectedContent><SingleAssignmentButtons /></ProtectedContent>
                 </div>
               </li>
               ))}
