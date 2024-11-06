@@ -10,33 +10,26 @@ import * as db from "../../Database";
 
 import ProtectedContent from "../../Account/ProtectedContent";
 
-import { addAssignment, updateAssignment, deleteAssignment }
+import { addAssignment, updateAssignment, deleteAssignment , editAssignment }
   from "./reducer";
 import { useSelector, useDispatch } from "react-redux";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const [assignments, setAssignments] = useState<any[]>(db.assignments);
   const [assignmentName, setAssignmentName] = useState("");
-  const assignment = db.assignments;
-  //const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
   const dispatch = useDispatch();
-  const addAssignment = () => {
-    setAssignments([ ...assignments, { _id: new Date().getTime().toString(),
-                                     title: assignmentName, course: cid } ]);
-    setAssignmentName("");
-  };
 
   return (
     <div className="wd-margin-left wd-padded-bottom-right wd-border-fat">
       <ProtectedContent><AssignmentControls 
-      setAssignmentName={setAssignmentName} assignmentName={assignmentName}
-      addAssignment={addAssignment}/></ProtectedContent><br /><br /><br />
-      {/*<ProtectedContent><AssignmentControls setAssignmentName={setAssignmentName} assignmentName={assignmentName} 
+        setAssignmentName={setAssignmentName} 
+        assignmentName={assignmentName}
         addAssignment={() => {
-          dispatch(addAssignment({ name: assignmentName, course: cid }));
+          dispatch(addAssignment({ title: assignmentName, course: cid }));
           setAssignmentName("");
-        }} /></ProtectedContent><br /><br /><br />*/}
+        }} />
+      </ProtectedContent><br /><br /><br /> {/*用于添加新模块的控件，包括输入框和添加按钮*/}
       <div id="wd-assignments">
 
         <ul id="wd-assignment" className="list-group rounded-0">
@@ -49,35 +42,56 @@ export default function Assignments() {
             </div>
 
             <ul className="wd-lessons list-group rounded-0">
-              {assignment
-                  .filter((assignments: any) => assignments.course === cid)
-                  .map((assignments: any) => (
-              <li className="wd-lesson list-group-item p-3 ps-1 d-flex align-items-center justify-content-between">
+              {assignments
+                      .filter((assignment: any) => assignment.course === cid)
+                      .map((assignment: any) => (
+                        <li key={assignment._id} className="wd-lesson list-group-item p-3 ps-1 d-flex align-items-center justify-content-between">
+                          <div>
+                            <BsGripVertical className="me-2 fs-4" />
+                            <FaRegPenToSquare className="me-2 fs-4" />
+                          </div>
+                          <div id="wd-assignment-list" className="d-flex flex-column flex-grow-1 ms-3">
+                            <a className="wd-assignment-link"
+                              href={`#/Kanbas/Courses/${cid}/Assignments/${assignments._id}`}>
+                              <b>{!assignment.editing && assignment.title}
+                                { assignment.editing && (
+                              <input className="form-control w-50 d-inline-block"
+                                onChange={(e) =>
+                                  dispatch(
+                                    updateAssignment({ ...assignment, title: e.target.value })
+                                  )
+                                }
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter") {
+                                    dispatch(updateAssignment({ ...assignment, editing: false }));
+                                  }
+                                }}
+                                defaultValue={assignment.title} />
+                            )}</b>
+                            </a>
+                            <div style={{ fontSize: '1rem' }}>
+                              <span className="text-danger">Multiple Modules</span>
+                              <span className="mx-2">|</span>
+                              <b>Not available until</b> May 6 at 12:00 am
+                              <span className="mx-2">|</span>
+                            <b>Due</b> May 13 at 11:59 pm <span className="mx-2">|</span> 100 pts
+                            </div>
+                          </div>
+                          
+              
                 <div>
-                  <BsGripVertical className="me-2 fs-4" />
-                  <FaRegPenToSquare className="me-2 fs-4" />
-                </div>
-                <div id="wd-assignment-list" className="d-flex flex-column flex-grow-1 ms-3">
-                  <a className="wd-assignment-link"
-                    href={`#/Kanbas/Courses/${cid}/Assignments/${assignments._id}`}>
-                    <b>{assignments._id}</b>
-                  </a>
-                  <div style={{ fontSize: '1rem' }}>
-                    <span className="text-danger">Multiple Modules</span>
-                    <span className="mx-2">|</span>
-                    <b>Not available until</b> May 6 at 12:00 am
-                    <span className="mx-2">|</span>
-                  <b>Due</b> May 13 at 11:59 pm <span className="mx-2">|</span> 100 pts
-                  </div>
-                </div>
-                <div>
-                  <ProtectedContent><SingleAssignmentButtons /></ProtectedContent>
+                  <ProtectedContent><SingleAssignmentButtons 
+                  assignmentId={assignment._id}
+                  deleteAssignment={(assignmentId) => {
+                    dispatch(deleteAssignment(assignmentId));
+                  }} /></ProtectedContent>
                 </div>
               </li>
-              ))}
-
+                      ))}      
             </ul>
+                    
           </li>
+                    
         </ul>
       </div>
     </div>

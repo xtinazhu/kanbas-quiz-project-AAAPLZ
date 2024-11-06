@@ -1,46 +1,24 @@
 import { RxCross2 } from "react-icons/rx";
+import React, { useState } from "react";
+import { useParams , useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from "react-redux";
+import { addAssignment , updateAssignment } from "./reducer";
 
-import { useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import * as db from "../../Database";
-export default function AssignmentEditor(
-  { assignmentName, setAssignmentName, addAssignment }:
-  { assignmentName: string; setAssignmentName: (name: string) => void; addAssignment: () => void; }
-) {
-  const { cid, aid, description , points, due , available_from , available_until } = useParams();
+export default function AssignmentEditor() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const assignments = db.assignments;
-  const [assignment, setAssignment] = useState<any>(null);
-
-  useEffect(() => {
-    // Find the assignment by its ID and ensure the course ID matches
-    const selectedAssignment = assignments.find((a: any) => a._id === aid && a.course === cid);
-    setAssignment(selectedAssignment);
-  }, [aid, cid, assignments, due , available_from , available_until]);
-  
+  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+  const { cid } = useParams();
+  const [assignmentName, setAssignmentName] = useState("");
 
   const handleSave = () => {
-    // Create a new updated assignment object
-    const updatedAssignment = {
-      ...assignment,
-      aid: aid,
-      description: description,
-      points: points,
-      due: due,
-      available_from: available_from,
-      available_until: available_until
-    };
-
-    // Update the assignment in the database
-    const assignmentIndex = assignments.findIndex((a: any) => a._id === aid);
-    if (assignmentIndex > -1) {
-      assignments[assignmentIndex] = updatedAssignment;
-    }
-
-    // Redirect back to the assignments list page after saving
+    dispatch(addAssignment({ title: assignmentName, course: cid }));
     navigate(`/Kanbas/Courses/${cid}/Assignments`);
   };
 
+  const handleCancel = () => {
+    navigate(`/Kanbas/Courses/${cid}/Assignments`);
+  };
 
   return (
     <div id="wd-assignments-editor" className="kb-margin-right-left kb-padded-bottom-right kb-border-fat">
@@ -48,7 +26,7 @@ export default function AssignmentEditor(
 
       <div className="row">
         <input id="wd-assignment-name" className="col-12 kb-input-height"
-          defaultValue={aid} placeholder="New Assignment"
+          value={assignmentName} placeholder="Assignment Name"
           onChange={(e) => setAssignmentName(e.target.value)} />
       </div><br />
       
@@ -66,7 +44,7 @@ export default function AssignmentEditor(
           Points&nbsp;
         </div>
         <input id="wd-name" className="col-8 kb-input-height" 
-          value={points || "100"} />
+          defaultValue={"100"} />
       </div><br />
 
       <div className="row">
@@ -161,16 +139,14 @@ export default function AssignmentEditor(
 
       <div><div id="wd-assignment-controls" className="text-nowrap">
       <button id="wd-add-module-btn" className="btn btn-lg btn-danger me-1 float-end" 
-        onClick={() => {
-          addAssignment(); 
-          navigate(`/Kanbas/Courses/${cid}/Assignments`); 
-        }} type="button">
+        onClick={handleSave} type="button">
         Save</button>
 
       <button id="wd-add-module-btn" className="btn btn-lg btn-secondary me-1 float-end" 
-        type="button" onClick={() => navigate(`/Kanbas/Courses/${cid}/Assignments`)}>
+        type="button" onClick={handleCancel}>
         Cancel</button>
       </div></div>
 
     </div>
-);}
+  )
+}

@@ -14,9 +14,7 @@ export default function AssignmentControls(
   return (
     <div>
       <div id="wd-assignment-controls" className="text-nowrap">
-        {/*<button id="wd-add-module-btn" className="btn btn-lg btn-danger me-1 float-end">
-          <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
-  Assignment</button>*/}
+
         <a id="wd-assignment-controls" className="btn btn-lg btn-danger me-1 float-end" 
           href={`#/Kanbas/Courses/${cid}/Assignments/NewAssignment`}>
           <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
@@ -33,7 +31,5 @@ export default function AssignmentControls(
         <input id="wd-text-fields-search" placeholder="Search..." style={{ paddingLeft: '30px', height: '45px', width: '100%' }} />
       </div>
 
-      {/*<AssignmentEditor  assignmentName={assignmentName}
-                    setAssignmentName={setAssignmentName} addAssignment={addAssignment} />*/}
     </div>
 );}
