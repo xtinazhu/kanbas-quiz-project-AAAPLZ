@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import * as db from "./Database";
 import ProtectedContent from "./Account/ProtectedContent";
+import ProtectedEnrollment from "./Account/ProtectedEnrollment";
 
 export default function Dashboard({ courses, course, setCourse, addNewCourse,
   deleteCourse, updateCourse }: {
@@ -17,7 +18,9 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
   return (
     <div id="wd-dashboard">
       <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
-      
+      <ProtectedEnrollment>
+        <button className="btn btn-primary float-end mb-3">Enrollments</button>
+      </ProtectedEnrollment>
       <ProtectedContent><h5>New Course
           <button className="btn btn-primary float-end"
                 id="wd-add-new-course-click"
@@ -35,9 +38,11 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
              onChange={(e) => setCourse({ ...course, description: e.target.value }) } />
       <hr /></ProtectedContent>
 
-      <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2> <hr />
+      <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2> 
+       <hr />
       <div id="wd-dashboard-courses" className="row">
         <div className="row row-cols-1 row-cols-md-5 g-4">
+        
 
           {courses
             .filter((course) =>
