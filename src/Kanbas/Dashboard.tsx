@@ -25,15 +25,35 @@ export default function Dashboard({
   // Manage enrollments in state
   const [enrollments, setEnrollments] = useState<any[]>([]);
 
-  // Load enrollments from localStorage or initialize from db
-  useEffect(() => {
-    const storedEnrollments = localStorage.getItem("enrollments");
-    if (storedEnrollments) {
-      setEnrollments(JSON.parse(storedEnrollments));
+  // Function to load enrollments for the current user
+  const loadEnrollments = () => {
+    if (currentUser && currentUser._id) {
+      const storedEnrollments = localStorage.getItem(
+        `enrollments_${currentUser._id}`
+      );
+      if (storedEnrollments) {
+        setEnrollments(JSON.parse(storedEnrollments));
+      } else {
+        // Initialize with enrollments from db for the current user
+        const userEnrollments = db.enrollments.filter(
+          (enrollment) => enrollment.user === currentUser._id
+        );
+        setEnrollments(userEnrollments);
+        // Save to localStorage
+        localStorage.setItem(
+          `enrollments_${currentUser._id}`,
+          JSON.stringify(userEnrollments)
+        );
+      }
     } else {
-      setEnrollments(db.enrollments);
+      setEnrollments([]);
     }
-  }, []);
+  };
+
+  // Load enrollments when component mounts or currentUser changes
+  useEffect(() => {
+    loadEnrollments();
+  }, [currentUser]);
 
   const [showEnrolledCourses, setShowEnrolledCourses] = useState(true);
   const toggleShowEnrolledCourses = () => {
@@ -43,9 +63,7 @@ export default function Dashboard({
   const displayedCourses = showEnrolledCourses
     ? courses.filter((course) =>
         enrollments.some(
-          (enrollment) =>
-            enrollment.user === currentUser._id &&
-            enrollment.course === course._id
+          (enrollment) => enrollment.course === course._id
         )
       )
     : courses;
@@ -105,9 +123,7 @@ export default function Dashboard({
           {displayedCourses.map((course) => {
             // Check if the user is enrolled in this course
             const isEnrolled = enrollments.some(
-              (enrollment) =>
-                enrollment.user === currentUser._id &&
-                enrollment.course === course._id
+              (enrollment) => enrollment.course === course._id
             );
 
             return (
@@ -168,14 +184,11 @@ export default function Dashboard({
                           // Unenroll the user
                           const updatedEnrollments = enrollments.filter(
                             (enrollment) =>
-                              !(
-                                enrollment.user === currentUser._id &&
-                                enrollment.course === course._id
-                              )
+                              enrollment.course !== course._id
                           );
                           setEnrollments(updatedEnrollments);
                           localStorage.setItem(
-                            "enrollments",
+                            `enrollments_${currentUser._id}`,
                             JSON.stringify(updatedEnrollments)
                           );
                         }}
@@ -199,7 +212,7 @@ export default function Dashboard({
                           ];
                           setEnrollments(updatedEnrollments);
                           localStorage.setItem(
-                            "enrollments",
+                            `enrollments_${currentUser._id}`,
                             JSON.stringify(updatedEnrollments)
                           );
                         }}
