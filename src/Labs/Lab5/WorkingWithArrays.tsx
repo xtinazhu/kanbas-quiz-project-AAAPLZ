@@ -48,5 +48,36 @@ export default function WorkingWithArrays() {
         <input defaultValue={todo.title} className="form-control w-50 float-start"
               onChange={(e) => setTodo({ ...todo, title: e.target.value }) }/>
         <br /><br /><hr />
+      
+      <h3>Update Todo Description</h3>
+        <a href={`${API}/${todo.id}/description/${todo.description}`}
+          className="btn btn-primary float-end">
+          Update Description
+        </a>
+        <input defaultValue={todo.id} className="form-control w-25 float-start me-2"
+          onChange={(e) => setTodo({ ...todo, id: e.target.value })} />
+        <input defaultValue={todo.description} className="form-control w-50 float-start"
+          onChange={(e) => setTodo({ ...todo, description: e.target.value })} />
+        <br /><br /><hr />
+
+        <h3>Update Todo Status</h3>
+      <a href={`${API}/${todo.id}/completed/true`} className="btn btn-primary float-end">
+        Mark Completed
+      </a>
+      <div className="float-start w-75">
+        <input defaultValue={todo.id} className="form-control w-25 float-start me-2"
+          onChange={(e) => setTodo({ ...todo, id: e.target.value })} />
+        <div className="form-check float-start mt-2">
+          <input className="form-check-input" type="checkbox"
+            checked={todo.completed}
+            onChange={() => {
+              setTodo({ ...todo, completed: true });
+              window.location.href = `${API}/${todo.id}/completed/true`;
+            }} />
+          <label className="form-check-label">Mark as Complete</label>
+        </div>
       </div>
+      <br /><br /><hr />
+
+  </div>
 );}
