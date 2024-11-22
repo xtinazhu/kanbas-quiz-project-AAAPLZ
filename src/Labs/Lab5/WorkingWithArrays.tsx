@@ -17,5 +17,11 @@ export default function WorkingWithArrays() {
         onChange={(e) => setTodo({ ...todo, id: e.target.value })} />
       <hr />
 
+      <h4>Filtering Array Items</h4>
+        <a id="wd-retrieve-completed-todos" className="btn btn-primary"
+          href={`${API}?completed=true`}>
+          Get Completed Todos
+        </a><hr/>
+
     </div>
 );}
