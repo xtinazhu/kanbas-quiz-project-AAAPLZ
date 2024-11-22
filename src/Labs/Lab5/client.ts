@@ -26,3 +26,9 @@ export const createTodo = async () => {
   const response = await axios.get(`${TODOS_API}/create`);
   return response.data;
 };
+
+//a5 3.6.1
+export const postTodo = async (todo: any) => {
+  const response = await axios.post(`${TODOS_API}`, todo);
+  return response.data;
+};

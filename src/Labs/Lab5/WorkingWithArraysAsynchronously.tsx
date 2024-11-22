@@ -20,11 +20,17 @@ export default function WorkingWithArraysAsynchronously() {
   useEffect(() => {
     fetchTodos();
   }, []);
+  //a5 3.6.1
+  const postTodo = async () => {
+    const newTodo = await client.postTodo({ title: "New Posted Todo", completed: false, });
+    setTodos([...todos, newTodo]);
+  };
   return (
     <div id="wd-asynchronous-arrays">
       <h3>Working with Arrays Asynchronously</h3>
-      <h4>Todos<FaPlusCircle onClick={createTodo} className="text-success float-end fs-3"
-                         id="wd-create-todo" /></h4>
+      <h4>Todos
+        <FaPlusCircle onClick={createTodo} className="text-success float-end fs-3" id="wd-create-todo" />
+        <FaPlusCircle onClick={postTodo}   className="text-primary float-end fs-3 me-3" id="wd-post-todo"   /></h4>
       <ul className="list-group">
         {todos.map((todo) => (
           <li key={todo.id} className="list-group-item">
