@@ -22,6 +22,12 @@ export default function WorkingWithArrays() {
           href={`${API}?completed=true`}>
           Get Completed Todos
         </a><hr/>
+        
+      <h3>Creating new Items in an Array</h3>
+        <a id="wd-retrieve-completed-todos" className="btn btn-primary"
+          href={`${API}/create`}>
+          Create Todo
+        </a><hr/>
 
     </div>
 );}
