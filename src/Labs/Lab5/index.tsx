@@ -5,6 +5,7 @@ import WorkingWithObjects from "./WorkingWithObjects";
 import WorkingWithArrays from "./WorkingWithArrays";
 import HttpClient from "./HttpClient";
 import WorkingWithObjectsAsynchronously from "./WorkingWithObjectsAsynchronously";
+import WorkingWithArraysAsynchronously from "./WorkingWithArraysAsynchronously";
 const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
 
 export default function Lab5() {
@@ -24,6 +25,7 @@ export default function Lab5() {
       <WorkingWithArrays />
       <HttpClient />
       <WorkingWithObjectsAsynchronously />
+      <WorkingWithArraysAsynchronously />
     </div>
   );
 }
