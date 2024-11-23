@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import * as userClient from "./Account/client";
+import * as enrollmentClient from "./Enrollments/client";
+import * as courseClient from "./Courses/client";
 import ProtectedContent from "./Account/ProtectedContent";
 import ProtectedEnrollment from "./Account/ProtectedEnrollment";
 
@@ -21,30 +22,110 @@ export default function Dashboard({
   updateCourse: () => void;
 }) {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const [myCourses, setMyCourses] = useState<any[]>([]);
+  const [enrollments, setEnrollments] = useState<any[]>([]);
+  const [showEnrolledCourses, setShowEnrolledCourses] = useState(true);
+  const [allCourses, setAllCourses] = useState<any[]>(courses);
 
-  // Function to fetch enrolled courses from server
-  const fetchMyCourses = async () => {
-    try {
-      const courses = await userClient.findMyCourses();
-      setMyCourses(courses);
-    } catch (error) {
-      console.error("Error fetching courses:", error);
+  // Function to load enrollments for the current user
+  const loadEnrollments = async () => {
+    if (currentUser && currentUser._id) {
+      try {
+        const userEnrollments = await enrollmentClient.findUserEnrollments(currentUser._id);
+        setEnrollments(userEnrollments);
+        localStorage.setItem(
+          `enrollments_${currentUser._id}`,
+          JSON.stringify(userEnrollments)
+        );
+      } catch (error) {
+        console.error("Error loading enrollments:", error);
+        const storedEnrollments = localStorage.getItem(
+          `enrollments_${currentUser._id}`
+        );
+        if (storedEnrollments) {
+          setEnrollments(JSON.parse(storedEnrollments));
+        }
+      }
+    } else {
+      setEnrollments([]);
     }
   };
 
-  // Fetch courses when component mounts or currentUser changes
-  useEffect(() => {
-    if (currentUser) {
-      fetchMyCourses();
+  // Load all courses
+  const loadAllCourses = async () => {
+    try {
+      const allCourses = await courseClient.fetchAllCourses();
+      setAllCourses(allCourses);
+    } catch (error) {
+      console.error("Error loading all courses:", error);
     }
+  };
+
+  // Load enrollments when component mounts or currentUser changes
+  useEffect(() => {
+    loadEnrollments();
+    loadAllCourses();
   }, [currentUser]);
+
+  const toggleShowEnrolledCourses = () => {
+    setShowEnrolledCourses(!showEnrolledCourses);
+  };
+
+  const displayedCourses = showEnrolledCourses 
+    ? allCourses.filter((course) => 
+        enrollments.some((enrollment) => enrollment.course === course._id)
+      )
+    : allCourses;
+
+  const handleEnroll = async (courseId: string, event: React.MouseEvent) => {
+    event.preventDefault();
+    try {
+      await enrollmentClient.enrollInCourse(courseId);
+      const newEnrollment = {
+        _id: Date.now().toString(),
+        user: currentUser._id,
+        course: courseId,
+      };
+      const updatedEnrollments = [...enrollments, newEnrollment];
+      setEnrollments(updatedEnrollments);
+      localStorage.setItem(
+        `enrollments_${currentUser._id}`,
+        JSON.stringify(updatedEnrollments)
+      );
+    } catch (error) {
+      console.error("Error enrolling:", error);
+    }
+  };
+
+  const handleUnenroll = async (courseId: string, event: React.MouseEvent) => {
+    event.preventDefault();
+    try {
+      await enrollmentClient.unenrollFromCourse(courseId);
+      const updatedEnrollments = enrollments.filter(
+        (enrollment) => enrollment.course !== courseId
+      );
+      setEnrollments(updatedEnrollments);
+      localStorage.setItem(
+        `enrollments_${currentUser._id}`,
+        JSON.stringify(updatedEnrollments)
+      );
+    } catch (error) {
+      console.error("Error unenrolling:", error);
+    }
+  };
 
   return (
     <div id="wd-dashboard">
-      <h1 id="wd-dashboard-title">Dashboard</h1> 
-      <hr />
+      <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
+      <ProtectedEnrollment>
+        <button
+          className="btn btn-primary float-end mb-3"
+          onClick={toggleShowEnrolledCourses}
+        >
+          {showEnrolledCourses ? "Show All Courses" : "Show My Courses"}
+        </button>
+      </ProtectedEnrollment>
 
+      {/* Rest of your code remains the same... */}
       <ProtectedContent>
         <h5>
           New Course
@@ -80,12 +161,17 @@ export default function Dashboard({
       </ProtectedContent>
 
       <h2 id="wd-dashboard-published">
-        Published Courses ({myCourses.length})
+        {showEnrolledCourses ? "My Courses" : "All Courses"} ({displayedCourses.length})
       </h2>
       <hr />
       <div id="wd-dashboard-courses" className="row">
         <div className="row row-cols-1 row-cols-md-5 g-4">
-          {myCourses.map((course) => (
+          {displayedCourses.map((course) => {
+            const isEnrolled = enrollments.some(
+              (enrollment) => enrollment.course === course._id
+            );
+
+            return (
               <div
                 className="wd-dashboard-course col"
                 style={{ width: "300px" }}
@@ -133,9 +219,27 @@ export default function Dashboard({
                       </ProtectedContent>
                     </div>
                   </Link>
+                  <ProtectedEnrollment>
+                    {isEnrolled ? (
+                      <button
+                        className="btn btn-danger m-2"
+                        onClick={(e) => handleUnenroll(course._id, e)}
+                      >
+                        Unenroll
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-success m-2"
+                        onClick={(e) => handleEnroll(course._id, e)}
+                      >
+                        Enroll
+                      </button>
+                    )}
+                  </ProtectedEnrollment>
                 </div>
               </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
