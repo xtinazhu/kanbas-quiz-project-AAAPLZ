@@ -12,7 +12,6 @@ export default function Labs() {
     <Provider store={store}>
       <div id="wd-labs">
         <h5>Yihua Zhu 20593</h5>
-        <h5>GitHub: https://github.com/evazhuyh/kanbas-react-web-app-a1.git</h5>
         <h1>Labs</h1>
         <TOC />
         <Routes>

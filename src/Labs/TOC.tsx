@@ -38,8 +38,16 @@ export default function TOC() {
           Kanbas</a></li>
         
       <li className="nav-item">
-        <a id="wd-k" href="https://github.com/jannunzi" className="nav-link">
+        <a id="wd-k" href="https://github.com/evazhuyh" className="nav-link">
           My GitHub</a></li>
+
+      <li className="nav-item">
+        <a id="wd-k" href="https://kanbas-node-server-app-95b2.onrender.com" className="nav-link">
+          My Render</a></li>
+
+      <li className="nav-item">
+        <a id="wd-k" href="https://kanbas-node-server-app-yihua-88308b5b67e6.herokuapp.com/" className="nav-link">
+          My Heroku</a></li>
         
     </ul>
   );
