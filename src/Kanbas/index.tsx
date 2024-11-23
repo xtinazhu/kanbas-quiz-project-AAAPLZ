@@ -12,6 +12,8 @@ import { useState } from "react";
 import store from "./store";
 import { Provider } from "react-redux";
 
+import Session from "./Account/Session";
+
 export default function Kanbas() {
   const [courses, setCourses] = useState<any[]>(db.courses);
   const [course, setCourse] = useState<any>({
@@ -37,7 +39,8 @@ export default function Kanbas() {
   };
 
   return (
-    <Provider store={store}>
+    <Session>
+    {/*<Provider store={store}>*/}
       <div id="wd-kanbas">
         <KanbasNavigation />
           <div className="wd-main-content-offset p-3">
@@ -64,5 +67,6 @@ export default function Kanbas() {
               </Routes>
           </div>
       </div>
-    </Provider>
+    {/*</Provider>*/}
+    </Session>
 );}
