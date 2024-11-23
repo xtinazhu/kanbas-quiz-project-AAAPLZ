@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import * as db from "./Database";
+import * as userClient from "./Account/client";
 import ProtectedContent from "./Account/ProtectedContent";
 import ProtectedEnrollment from "./Account/ProtectedEnrollment";
 
@@ -21,64 +21,29 @@ export default function Dashboard({
   updateCourse: () => void;
 }) {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const [myCourses, setMyCourses] = useState<any[]>([]);
 
-  // Manage enrollments in state
-  const [enrollments, setEnrollments] = useState<any[]>([]);
-
-  // Function to load enrollments for the current user
-  const loadEnrollments = () => {
-    if (currentUser && currentUser._id) {
-      const storedEnrollments = localStorage.getItem(
-        `enrollments_${currentUser._id}`
-      );
-      if (storedEnrollments) {
-        setEnrollments(JSON.parse(storedEnrollments));
-      } else {
-        // Initialize with enrollments from db for the current user
-        const userEnrollments = db.enrollments.filter(
-          (enrollment) => enrollment.user === currentUser._id
-        );
-        setEnrollments(userEnrollments);
-        // Save to localStorage
-        localStorage.setItem(
-          `enrollments_${currentUser._id}`,
-          JSON.stringify(userEnrollments)
-        );
-      }
-    } else {
-      setEnrollments([]);
+  // Function to fetch enrolled courses from server
+  const fetchMyCourses = async () => {
+    try {
+      const courses = await userClient.findMyCourses();
+      setMyCourses(courses);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
     }
   };
 
-  // Load enrollments when component mounts or currentUser changes
+  // Fetch courses when component mounts or currentUser changes
   useEffect(() => {
-    loadEnrollments();
+    if (currentUser) {
+      fetchMyCourses();
+    }
   }, [currentUser]);
-
-  const [showEnrolledCourses, setShowEnrolledCourses] = useState(true);
-  const toggleShowEnrolledCourses = () => {
-    setShowEnrolledCourses(!showEnrolledCourses);
-  };
-
-  const displayedCourses = showEnrolledCourses
-    ? courses.filter((course) =>
-        enrollments.some(
-          (enrollment) => enrollment.course === course._id
-        )
-      )
-    : courses;
 
   return (
     <div id="wd-dashboard">
-      <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
-      <ProtectedEnrollment>
-        <button
-          className="btn btn-primary float-end mb-3"
-          onClick={toggleShowEnrolledCourses}
-        >
-          Enrollments
-        </button>
-      </ProtectedEnrollment>
+      <h1 id="wd-dashboard-title">Dashboard</h1> 
+      <hr />
 
       <ProtectedContent>
         <h5>
@@ -115,18 +80,12 @@ export default function Dashboard({
       </ProtectedContent>
 
       <h2 id="wd-dashboard-published">
-        Published Courses ({displayedCourses.length})
+        Published Courses ({myCourses.length})
       </h2>
       <hr />
       <div id="wd-dashboard-courses" className="row">
         <div className="row row-cols-1 row-cols-md-5 g-4">
-          {displayedCourses.map((course) => {
-            // Check if the user is enrolled in this course
-            const isEnrolled = enrollments.some(
-              (enrollment) => enrollment.course === course._id
-            );
-
-            return (
+          {myCourses.map((course) => (
               <div
                 className="wd-dashboard-course col"
                 style={{ width: "300px" }}
@@ -174,57 +133,9 @@ export default function Dashboard({
                       </ProtectedContent>
                     </div>
                   </Link>
-                  {/* Enroll/Unenroll Buttons */}
-                  <ProtectedEnrollment>
-                    {isEnrolled ? (
-                      <button
-                        className="btn btn-danger m-2"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          // Unenroll the user
-                          const updatedEnrollments = enrollments.filter(
-                            (enrollment) =>
-                              enrollment.course !== course._id
-                          );
-                          setEnrollments(updatedEnrollments);
-                          localStorage.setItem(
-                            `enrollments_${currentUser._id}`,
-                            JSON.stringify(updatedEnrollments)
-                          );
-                        }}
-                      >
-                        Unenroll
-                      </button>
-                    ) : (
-                      <button
-                        className="btn btn-success m-2"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          // Enroll the user
-                          const newEnrollment = {
-                            _id: Date.now().toString(),
-                            user: currentUser._id,
-                            course: course._id,
-                          };
-                          const updatedEnrollments = [
-                            ...enrollments,
-                            newEnrollment,
-                          ];
-                          setEnrollments(updatedEnrollments);
-                          localStorage.setItem(
-                            `enrollments_${currentUser._id}`,
-                            JSON.stringify(updatedEnrollments)
-                          );
-                        }}
-                      >
-                        Enroll
-                      </button>
-                    )}
-                  </ProtectedEnrollment>
                 </div>
               </div>
-            );
-          })}
+          ))}
         </div>
       </div>
     </div>
