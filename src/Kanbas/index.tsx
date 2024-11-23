@@ -63,7 +63,6 @@ export default function Kanbas() {
         <KanbasNavigation />
           <div className="wd-main-content-offset p-3">
             <h5>Yihua Zhu 20593</h5>
-            <h5>GitHub: https://github.com/evazhuyh/kanbas-react-web-app-a1.git</h5>
             <h1>Kanbas</h1>
             <Routes>
                 <Route path="/" element={<Navigate to="Account" />} />
