@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import ProtectedContent from "./Account/ProtectedContent";
+import ProtectedEnrollment from "./Account/ProtectedEnrollment";
+
 export default function Dashboard({
   courses,
   course,
@@ -18,7 +21,8 @@ export default function Dashboard({
   return (
     <div id="wd-dashboard">
       <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
-      <h5>
+      
+      <ProtectedContent><h5>
         New Course
         <button className="btn btn-primary float-end" onClick={addNewCourse}>
           {" "}
@@ -42,7 +46,7 @@ export default function Dashboard({
         className="form-control"
         onChange={(e) => setCourse({ ...course, description: e.target.value })}
       />
-      <hr />
+      <hr /></ProtectedContent>
       <h2 id="wd-dashboard-published">
         Published Courses ({courses.length})
       </h2>{" "}
@@ -67,7 +71,7 @@ export default function Dashboard({
                     >
                       {course.description}
                     </p>
-                    <button
+                    <ProtectedContent><button
                       id="wd-edit-course-click"
                       onClick={(event) => {
                         event.preventDefault();
@@ -86,7 +90,7 @@ export default function Dashboard({
                       className="btn btn-danger float-end"
                     >
                       Delete
-                    </button>
+                    </button></ProtectedContent>
 
                     <button className="btn btn-primary"> Go </button>
                   </div>
