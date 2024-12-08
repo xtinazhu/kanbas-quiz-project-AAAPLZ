@@ -1,0 +1,38 @@
+[
+  {
+    "title": "Propulsion Assignment",
+    "course": {"$oid": "6753726e756c61f8df2ab4a2"}
+  },
+  {
+    "title": "Combustion Analysis",
+    "course": {"$oid": "6753726e756c61f8df2ab4a2"}
+  },
+  {
+    "title": "Nozzle Design Project",
+    "course": {"$oid": "6753726e756c61f8df2ab4a2"}
+  },
+  {
+    "title": "Aerodynamics Quiz",
+    "course": {"$oid": "6753726e756c61f8df2ab4a3"}
+  },
+  {
+    "title": "Flow Analysis",
+    "course": {"$oid": "6753726e756c61f8df2ab4a3"}
+  },
+  {
+    "title": "Heating Analysis",
+    "course": {"$oid": "6753726e756c61f8df2ab4a3"}
+  },
+  {
+    "title": "Structural Design Task",
+    "course": {"$oid": "6753726e756c61f8df2ab4a4"}
+  },
+  {
+    "title": "Orbital Calculations",
+    "course": {"$oid": "6753726e756c61f8df2ab4a4"}
+  },
+  {
+    "title": "Systems Engineering Exam",
+    "course": {"$oid": "6753726e756c61f8df2ab4a4"}
+  }
+]

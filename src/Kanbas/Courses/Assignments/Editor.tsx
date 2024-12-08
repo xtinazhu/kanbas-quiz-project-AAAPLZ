@@ -1,19 +1,69 @@
 import { RxCross2 } from "react-icons/rx";
-import React, { useState } from "react";
-import { useParams , useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from "react-redux";
-import { addAssignment , updateAssignment } from "./reducer";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+import { addAssignment } from "./reducer";
+import * as client from "./client";
+
+interface Assignment {
+  _id?: string;
+  title: string;
+  description: string;
+  points: number;
+  dueDate: string;
+  availableFromDate: string;
+  availableUntilDate: string;
+}
 
 export default function AssignmentEditor() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
   const { cid } = useParams();
-  const [assignmentName, setAssignmentName] = useState("");
 
-  const handleSave = () => {
-    dispatch(addAssignment({ title: assignmentName, course: cid }));
-    navigate(`/Kanbas/Courses/${cid}/Assignments`);
+  const [assignment, setAssignment] = useState<Assignment>({
+    title: "",
+    description: `The assignment is available online. 
+      Submit a link to the landing page of your Web application running on Netlify. 
+      The landing page should include the following: Your full name and section Links to each of the 
+      lab assignment Link to the Kanbas application Links to all relevant source code repositories.`,
+    points: 100,
+    dueDate: new Date().toISOString().slice(0, 16),
+    availableFromDate: new Date().toISOString().slice(0, 16),
+    availableUntilDate: new Date().toISOString().slice(0, 16)
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setAssignment(prev => ({
+      ...prev,
+      [name]: name === 'points' ? parseInt(value) : value
+    }));
+  };
+
+  const handleSave = async () => {
+    if (!cid) return;
+    
+    if (!assignment.title.trim()) {
+      alert("Assignment title is required");
+      return;
+    }
+  
+    try {
+      const assignmentData = {
+        ...assignment,
+        course: cid,
+        dueDate: assignment.dueDate || new Date().toISOString(),
+        availableFromDate: assignment.availableFromDate || new Date().toISOString(),
+        availableUntilDate: assignment.availableUntilDate || new Date().toISOString(),
+      };
+  
+      const newAssignment = await client.createAssignment(cid, assignmentData);
+      dispatch(addAssignment(newAssignment));
+      navigate(`/Kanbas/Courses/${cid}/Assignments`);
+    } catch (error) {
+      console.error("Failed to save assignment:", error);
+      alert("Failed to save assignment. Please check all required fields.");
+    }
   };
 
   const handleCancel = () => {
@@ -23,130 +73,92 @@ export default function AssignmentEditor() {
   return (
     <div id="wd-assignments-editor" className="kb-margin-right-left kb-padded-bottom-right kb-border-fat">
       <div className="row">Assignment Name</div>
-
       <div className="row">
-        <input id="wd-assignment-name" className="col-12 kb-input-height"
-          value={assignmentName} placeholder="Assignment Name"
-          onChange={(e) => setAssignmentName(e.target.value)} />
+        <input 
+          id="wd-assignment-name"
+          name="title"
+          className="col-12 kb-input-height"
+          value={assignment.title}
+          placeholder="Assignment Name"
+          onChange={handleChange}
+        />
       </div><br />
       
       <div className="row">
-      <textarea id="wd-assignment-description" className="col-12 kb-textarea-height">
-          The assignment is available online. 
-          Submit a link to the landing page of your Web application running on Netlify. 
-          The landing page should include the following: Your full name and section Links to each of the 
-          lab assignment Link to the Kanbas application Links to all relevant source code repositories.
-        </textarea>
+        <textarea 
+          id="wd-assignment-description"
+          name="description"
+          className="col-12 kb-textarea-height"
+          value={assignment.description}
+          onChange={handleChange}
+        />
       </div><br />
 
       <div className="row">
         <div className="col-4 kb-textalign-center-right">
           Points&nbsp;
         </div>
-        <input id="wd-name" className="col-8 kb-input-height" 
-          defaultValue={"100"} />
+        <input 
+          id="wd-points"
+          name="points"
+          type="number"
+          className="col-8 kb-input-height"
+          value={assignment.points}
+          onChange={handleChange}
+        />
       </div><br />
 
       <div className="row">
-        <div className="col-4 kb-textalign-center-right">
-          Assignment Group&nbsp;
-        </div>
-          <select id="wd-group" className="col-8 kb-input-height">
-            <option value="ASSIGNMENTS">ASSIGNMENTS</option>
-          </select>
+        <div className="col-4 kb-textalign-center-right">Due Date&nbsp;</div>
+        <input 
+          type="datetime-local"
+          name="dueDate"
+          className="col-8 kb-input-height"
+          value={assignment.dueDate}
+          onChange={handleChange}
+        />
       </div><br />
 
       <div className="row">
-        <div className="col-4 kb-textalign-center-right">
-          Display Grade as&nbsp;
-        </div>
-          <select id="wd-group" className="col-8 kb-input-height">
-            <option value="Percentage">Percentage</option>
-          </select>
+        <div className="col-4 kb-textalign-center-right">Available From&nbsp;</div>
+        <input 
+          type="datetime-local"
+          name="availableFromDate"
+          className="col-8 kb-input-height"
+          value={assignment.availableFromDate}
+          onChange={handleChange}
+        />
       </div><br />
 
       <div className="row">
-        <div className="col-4 kb-textalign-center-right">
-          Submission Type&nbsp;
-        </div>
-        <div className="col-8  kb-border-thin wd-border-solid">
-          <div className="kb-assignment-editor-margin-all-around">
-            <select id="wd-group" className="col-12 kb-input-height">
-              <option value="Online">Online</option>
-            </select>
-            <br /><br />
-            <label htmlFor="wd-submission-type">
-              <h5>Online Entry Option</h5></label><br /><br />
-              <input type="checkbox" name="check-online-Options" id="wd-text-entry"/>
-              <label htmlFor="wd-text-entry">&nbsp;Text Entry</label><br/><br/>
-
-              <input type="checkbox" name="check-online-Options" id="wd-website-url"/>
-              <label htmlFor="wd-website-url">&nbsp;Website URL</label><br/><br/>
-
-              <input type="checkbox" name="check-online-Options" id="wd-media-recordings"/>
-              <label htmlFor="wd-media-recordings">&nbsp;Media Recordings</label><br/><br/>
-
-              <input type="checkbox" name="check-online-Options" id="wd-student-annotation"/>
-              <label htmlFor="wd-student-annotation">&nbsp;Student Annotation</label><br/><br/>
-
-              <input type="checkbox" name="check-online-Options" id="wd-file-upload"/>
-              <label htmlFor="wd-file-upload">&nbsp;File Uploads</label>
-            </div>
-        </div>
-      </div><br />
-
-      <div className="row">
-        <div className="col-4 kb-textalign-center-right">
-          Assign&nbsp;
-        </div>
-        <div className="col-8  kb-border-thin wd-border-solid">
-          <div className="kb-assignment-editor-margin-all-around">
-            <h5>Assign to</h5>
-            <div className="row col-12  kb-border-thin wd-border-solid kb-assign-margin">
-              <div className="row col-3 bg-secondary text-black kb-input-margin">
-                <div>Everyone</div>
-                <div className="float-end"><RxCross2 /></div>
-              </div>
-            </div><br />
-            
-            <h5>Due</h5>
-            <div className="row col-12  kb-border-thin wd-border-solid kb-assign-margin">
-              <input type="datetime-local" id="wd-due-date" name="dateTimeInput" value="2024-05-13 23:59"></input>
-            </div><br />
-
-            <div className="row">
-              <div className="col-6">
-                <h5>Available from</h5>
-              </div>
-              <div className="col-6">
-                <h5>Unitl</h5>
-              </div>
-            </div>
-            <div className="row kb-assign-margin">
-              <div className="col-5 kb-border-thin wd-border-solid">
-                <input type="datetime-local" id="wd-available-from" name="dateTimeInput" value="2024-05-03 23:59"></input>
-              </div><br />
-              <div className="col-5 kb-border-thin wd-border-solid kb-assign-margin-left">
-                <input type="datetime-local" id="wd-available-from" name="dateTimeInput" value="2024-05-13 23:59"></input>
-              </div>
-            </div>
-            
-          </div>
-        </div>
+        <div className="col-4 kb-textalign-center-right">Available Until&nbsp;</div>
+        <input 
+          type="datetime-local"
+          name="availableUntilDate"
+          className="col-8 kb-input-height"
+          value={assignment.availableUntilDate}
+          onChange={handleChange}
+        />
       </div><br />
 
       <hr />
 
-      <div><div id="wd-assignment-controls" className="text-nowrap">
-      <button id="wd-add-module-btn" className="btn btn-lg btn-danger me-1 float-end" 
-        onClick={handleSave} type="button">
-        Save</button>
+      <div>
+        <div id="wd-assignment-controls" className="text-nowrap">
+          <button 
+            onClick={handleSave}
+          >
+            Save
+          </button>
 
-      <button id="wd-add-module-btn" className="btn btn-lg btn-secondary me-1 float-end" 
-        type="button" onClick={handleCancel}>
-        Cancel</button>
-      </div></div>
-
+          <button 
+            className="btn btn-lg btn-secondary me-1 float-end"
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
     </div>
-  )
+  );
 }
