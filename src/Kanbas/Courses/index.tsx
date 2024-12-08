@@ -3,7 +3,8 @@ import Modules from "./Modules";
 import Home from "./Home";
 import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
-import PeopleTable from "./People/Table";
+//import PeopleTable from "./People/Table";
+import People from "./People";
 import { Navigate, Route, Routes , useParams, useLocation } from "react-router";
 import { FaAlignJustify } from "react-icons/fa";
 import React, { useState } from "react";
@@ -38,9 +39,10 @@ export default function Courses({ courses }: { courses: any[]; }) {
               <Route path="Modules" element={<Modules />} />
               <Route path="Assignments" element={<Assignments />} />
               <Route path="Assignments/:aid" element={<AssignmentEditor />} />
-              <Route path="People" element={<PeopleTable />} />
+              <Route path="People" element={<People />} />
             </Routes>
           </div>
         </div>
     </div>
 );}
+//<Route path="People" element={<PeopleTable />} />
