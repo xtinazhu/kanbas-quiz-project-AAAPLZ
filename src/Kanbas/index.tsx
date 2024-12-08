@@ -9,27 +9,54 @@ import KanbasNavigation from "./Navigation";
 import "./styles.css";
 import ProtectedRoute from "./Account/ProtectedRoute";
 import * as courseClient from "./Courses/client";
+import * as userClient from "./Account/client";
 
 export default function Kanbas() {
-  const [courses, setCourses] = useState<any[]>([]);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const [courses, setCourses] = useState<any[]>([]);
+  const [enrolling, setEnrolling] = useState<boolean>(false);
 
-  const deleteCourse = async (courseId: string) => {
-    const status = await courseClient.deleteCourse(courseId);
-    setCourses(courses.filter((course) => course._id !== courseId));
-  };
-  
-  const fetchCourses = async () => {
+  const findCoursesForUser = async () => {
     try {
-      const courses = await courseClient.fetchAllCourses();
+      const courses = await userClient.findCoursesForUser(currentUser._id);
       setCourses(courses);
     } catch (error) {
       console.error(error);
     }
   };
+
+  const fetchCourses = async () => {
+    try {
+      const allCourses = await courseClient.fetchAllCourses();
+      const enrolledCourses = await userClient.findCoursesForUser(
+        currentUser._id
+      );
+      const courses = allCourses.map((course: any) => {
+        if (enrolledCourses.find((c: any) => c._id === course._id)) {
+          return { ...course, enrolled: true };
+        } else {
+          return course;
+        }
+      });
+      setCourses(courses);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const deleteCourse = async (courseId: string) => {
+    const status = await courseClient.deleteCourse(courseId);
+    setCourses(courses.filter((course) => course._id !== courseId));
+  };
+
   useEffect(() => {
-    fetchCourses();
-  }, [currentUser]);
+    if (enrolling) {
+      fetchCourses();
+    } else {
+      findCoursesForUser();
+    }
+  }, [currentUser, enrolling]);
+ 
 
   const [course, setCourse] = useState<any>({
     _id: "0",
@@ -77,8 +104,8 @@ export default function Kanbas() {
                   addNewCourse={addNewCourse}
                   deleteCourse={deleteCourse}
                   updateCourse={updateCourse}
-                  //enrolling={enrolling}
-                  //setEnrolling={setEnrolling}
+                  enrolling={enrolling}
+                  setEnrolling={setEnrolling}
                   //updateEnrollment={updateEnrollment}
                 />
               </ProtectedRoute>

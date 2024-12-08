@@ -3,6 +3,12 @@ const axiosWithCredentials = axios.create({ withCredentials: true });
 export const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
 export const USERS_API = `${REMOTE_SERVER}/api/users`;
 
+//a6 5.3.2
+export const findCoursesForUser = async (userId: string) => {
+  const response = await axiosWithCredentials.get(`${USERS_API}/${userId}/courses`);
+  return response.data;
+};
+
 export const createUser = async (user: any) => {
   const response = await axios.post(`${USERS_API}`, user);
   return response.data;
