@@ -1,0 +1,89 @@
+[
+  {
+    "name": "Introduction to Rocket Propulsion",
+    "description": "Basic principles of rocket propulsion and rocket engines.",
+    "course": {"$oid": "6753726e756c61f8df2ab4a2"},
+    "lessons": [
+      {
+        "name": "History of Rocketry",
+        "description": "A brief history of rocketry and space exploration."
+      },
+      {
+        "name": "Rocket Propulsion Fundamentals",
+        "description": "Basic principles of rocket propulsion."
+      },
+      {
+        "name": "Rocket Engine Types",
+        "description": "Overview of different types of rocket engines."
+      }
+    ]
+  },
+  {
+    "name": "Fuel and Combustion",
+    "description": "Understanding rocket fuel, combustion processes, and efficiency.",
+    "course": {"$oid": "6753726e756c61f8df2ab4a2"},
+    "lessons": [
+      {
+        "name": "Rocket Fuel",
+        "description": "Overview of different types of rocket fuels."
+      },
+      {
+        "name": "Combustion Processes",
+        "description": "Understanding combustion processes and efficiency."
+      },
+      {
+        "name": "Combustion Instability",
+        "description": "Understanding combustion instability and mitigation."
+      }
+    ]
+  },
+  {
+    "name": "Nozzle Design",
+    "description": "Principles of rocket nozzle design and performance optimization.",
+    "course": {"$oid": "6753726e756c61f8df2ab4a2"},
+    "lessons": [
+      {
+        "name": "Nozzle Design",
+        "description": "Overview of different types of rocket nozzles."
+      },
+      {
+        "name": "Nozzle Performance",
+        "description": "Understanding nozzle performance and efficiency."
+      },
+      {
+        "name": "Nozzle Optimization",
+        "description": "Optimizing nozzle design for specific applications."
+      }
+    ]
+  },
+  {
+    "name": "Fundamentals of Aerodynamics",
+    "description": "Basic aerodynamic concepts and fluid dynamics principles.",
+    "course": {"$oid": "6753726e756c61f8df2ab4a3"}
+  },
+  {
+    "name": "Subsonic and Supersonic Flow",
+    "description": "Understanding subsonic and supersonic aerodynamic behaviors.",
+    "course": {"$oid": "6753726e756c61f8df2ab4a3"}
+  },
+  {
+    "name": "Aerodynamic Heating",
+    "description": "Study of aerodynamic heating and thermal protection systems.",
+    "course": {"$oid": "6753726e756c61f8df2ab4a3"}
+  },
+  {
+    "name": "Spacecraft Structural Design",
+    "description": "Fundamentals of designing spacecraft structures and materials selection.",
+    "course": {"$oid": "6753726e756c61f8df2ab4a4"}
+  },
+  {
+    "name": "Orbital Mechanics",
+    "description": "Understanding orbital dynamics and mission planning.",
+    "course": {"$oid": "6753726e756c61f8df2ab4a4"}
+  },
+  {
+    "name": "Spacecraft Systems Engineering",
+    "description": "Overview of spacecraft systems and subsystems engineering.",
+    "course": {"$oid": "6753726e756c61f8df2ab4a4"}
+  }
+]
