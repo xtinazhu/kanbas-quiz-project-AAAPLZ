@@ -146,6 +146,7 @@ export default function AssignmentEditor() {
       <div>
         <div id="wd-assignment-controls" className="text-nowrap">
           <button 
+            className="btn btn-lg btn-secondary me-1 float-end"
             onClick={handleSave}
           >
             Save
