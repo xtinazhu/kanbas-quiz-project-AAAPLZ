@@ -12,7 +12,8 @@ export default function Dashboard({
   deleteCourse,
   updateCourse,
   enrolling, 
-  setEnrolling
+  setEnrolling,
+  updateEnrollment
 }: {
   courses: any[];
   course: any;
@@ -22,6 +23,7 @@ export default function Dashboard({
   updateCourse: () => void;
   enrolling: boolean; 
   setEnrolling: (enrolling: boolean) => void;
+  updateEnrollment: (courseId: string, enrolled: boolean) => void
 }) {
   return (
     <div id="wd-dashboard">
@@ -74,7 +76,11 @@ export default function Dashboard({
                   <div className="card-body">
                     <h5 className="wd-dashboard-course-title card-title">
                       {enrolling && (
-                        <button className={`btn ${ course.enrolled ? "btn-danger" : "btn-success" } float-end`} >
+                        <button onClick={(event) => {
+                                  event.preventDefault();
+                                  updateEnrollment(course._id, !course.enrolled);
+                                }}  
+                          className={`btn ${ course.enrolled ? "btn-danger" : "btn-success" } float-end`} >
                           {course.enrolled ? "Unenroll" : "Enroll"}
                         </button>
                       )}
