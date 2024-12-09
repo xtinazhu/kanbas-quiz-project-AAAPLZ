@@ -16,6 +16,7 @@ export default function PeopleTable({ users = [] }: { users?: any[] }) {
         </thead>
         <tbody>
           {users
+            .filter((user: any) => user && user._id) // 过滤掉空值或没有 _id 的用户
             .map((user: any) => (
               <tr key={user._id}>
                 <td className="wd-full-name text-nowrap">
@@ -33,7 +34,7 @@ export default function PeopleTable({ users = [] }: { users?: any[] }) {
               </tr>
             ))}
         </tbody>
-
       </table>
     </div>
-);}
+  );
+}
