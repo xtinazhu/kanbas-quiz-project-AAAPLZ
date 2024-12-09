@@ -107,8 +107,7 @@ export default function Kanbas() {
     <div id="wd-kanbas">
       <KanbasNavigation />
       <div className="wd-main-content-offset p-3">
-        <h5>Yihua Zhu 20593</h5>
-        <h1>Kanbas</h1>
+        <h5>Group Name: AAAPLZ</h5>
         <Routes>
           <Route path="/" element={<Navigate to="Account" />} />
           <Route path="/Account/*" element={<Account />} />
