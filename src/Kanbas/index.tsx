@@ -107,7 +107,9 @@ export default function Kanbas() {
     <div id="wd-kanbas">
       <KanbasNavigation />
       <div className="wd-main-content-offset p-3">
-        <h5>Group Name: AAAPLZ</h5>
+        <h5>Group Members: Yihua Zhu 20593, Zhiying Zhu 20596, Yang Shi 20593</h5>
+        <h5>GitHub React.js: https://github.com/evazhuyh/kanbas-quiz-project-AAAPLZ</h5>
+        <h5>GitHub Node.js: https://github.com/evazhuyh/kanbas-quiz-node-server-AAAPLZ</h5>
         <Routes>
           <Route path="/" element={<Navigate to="Account" />} />
           <Route path="/Account/*" element={<Account />} />
