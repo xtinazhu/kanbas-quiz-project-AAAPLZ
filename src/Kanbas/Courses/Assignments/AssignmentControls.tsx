@@ -10,7 +10,7 @@ export default function AssignmentControls(
   { assignmentName: string; setAssignmentName: (title: string) => void; addAssignment: () => void; }
 ) {
   const { cid } = useParams();
-  const [assignments, setAssignments] = useState("");
+  //const [assignments, setAssignments] = useState("");
   return (
     <div>
       <div id="wd-assignment-controls" className="text-nowrap">

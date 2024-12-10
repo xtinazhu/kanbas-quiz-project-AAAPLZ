@@ -58,6 +58,7 @@ export default function Profile() {
           value={profile.username || ""} 
           id="wd-username" 
           className="form-control mb-2"
+          placeholder="username"
           onChange={(e) => setProfile({ ...profile, username: e.target.value })}
         />
         <input 
@@ -65,18 +66,21 @@ export default function Profile() {
           id="wd-password" 
           className="form-control mb-2"
           type="password"
+          placeholder="password"
           onChange={(e) => setProfile({ ...profile, password: e.target.value })}
         />
         <input 
           value={profile.firstName || ""} 
           id="wd-firstname" 
           className="form-control mb-2"
+          placeholder="first name"
           onChange={(e) => setProfile({ ...profile, firstName: e.target.value })}
         />
         <input 
           value={profile.lastName || ""} 
           id="wd-lastname" 
           className="form-control mb-2"
+          placeholder="last name"
           onChange={(e) => setProfile({ ...profile, lastName: e.target.value })}
         />
         <input 
@@ -90,6 +94,7 @@ export default function Profile() {
           value={profile.email || ""} 
           id="wd-email" 
           className="form-control mb-2"
+          placeholder="email"
           onChange={(e) => setProfile({ ...profile, email: e.target.value })}
         />
         <select 
