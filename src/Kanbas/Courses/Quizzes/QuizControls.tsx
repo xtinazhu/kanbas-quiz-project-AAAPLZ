@@ -24,7 +24,7 @@ export default function QuizControls(
           <FaEllipsisVertical />
           </button>
           {showContextMenu && (
-            <ul className="dropdown-menu dropdown-menu-end">
+            <ul className="btn btn-lg btn-secondary me-1 dropdown-menu dropdown-menu-end">
               <li><a className="dropdown-item" href={`#/Kanbas/Courses/${cid}/Quizzes/EditQuiz`}>Edit</a></li>
               <li><button className="dropdown-item">Delete</button></li>
               <li><button className="dropdown-item">Publish</button></li>
