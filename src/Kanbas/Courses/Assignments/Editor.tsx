@@ -2,7 +2,7 @@ import { RxCross2 } from "react-icons/rx";
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux";
-import { addAssignment } from "./reducer";
+import { addAssignment, updateAssignment } from "./reducer";
 import * as client from "./client";
 
 interface Assignment {
@@ -18,19 +18,39 @@ interface Assignment {
 export default function AssignmentEditor() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { cid } = useParams();
+  const { cid, aid } = useParams();  // Add aid parameter for assignment ID
 
   const [assignment, setAssignment] = useState<Assignment>({
     title: "",
-    description: `The assignment is available online. 
-      Submit a link to the landing page of your Web application running on Netlify. 
-      The landing page should include the following: Your full name and section Links to each of the 
-      lab assignment Link to the Kanbas application Links to all relevant source code repositories.`,
+    description: "",
     points: 100,
     dueDate: new Date().toISOString().slice(0, 16),
     availableFromDate: new Date().toISOString().slice(0, 16),
     availableUntilDate: new Date().toISOString().slice(0, 16)
   });
+
+  // Load existing assignment data if aid is present
+  useEffect(() => {
+    const loadAssignment = async () => {
+      if (aid) {
+        try {
+          const existingAssignment = await client.findAssignmentById(aid);
+          // Format dates to work with datetime-local input
+          const formattedAssignment = {
+            ...existingAssignment,
+            dueDate: new Date(existingAssignment.dueDate).toISOString().slice(0, 16),
+            availableFromDate: new Date(existingAssignment.availableFromDate).toISOString().slice(0, 16),
+            availableUntilDate: new Date(existingAssignment.availableUntilDate).toISOString().slice(0, 16)
+          };
+          setAssignment(formattedAssignment);
+        } catch (error) {
+          console.error("Failed to load assignment:", error);
+          alert("Failed to load assignment details.");
+        }
+      }
+    };
+    loadAssignment();
+  }, [aid]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -42,12 +62,12 @@ export default function AssignmentEditor() {
 
   const handleSave = async () => {
     if (!cid) return;
-    
+      
     if (!assignment.title.trim()) {
       alert("Assignment title is required");
       return;
     }
-  
+    
     try {
       const assignmentData = {
         ...assignment,
@@ -56,9 +76,18 @@ export default function AssignmentEditor() {
         availableFromDate: assignment.availableFromDate || new Date().toISOString(),
         availableUntilDate: assignment.availableUntilDate || new Date().toISOString(),
       };
-  
-      const newAssignment = await client.createAssignment(cid, assignmentData);
-      dispatch(addAssignment(newAssignment));
+    
+      // 修改判断条件
+      if (aid && aid !== "NewAssignment") {
+        // Update existing assignment
+        const updatedAssignment = await client.updateAssignment({ ...assignmentData, _id: aid });
+        dispatch(updateAssignment(updatedAssignment));
+      } else {
+        // Create new assignment
+        const newAssignment = await client.createAssignment(cid, assignmentData);
+        dispatch(addAssignment(newAssignment));
+      }
+        
       navigate(`/Kanbas/Courses/${cid}/Assignments`);
     } catch (error) {
       console.error("Failed to save assignment:", error);

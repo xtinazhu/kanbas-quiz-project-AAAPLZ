@@ -4,24 +4,34 @@ import { useSelector, useDispatch } from "react-redux";
 import { RxRocket } from "react-icons/rx";
 import { RxTriangleDown } from "react-icons/rx";
 import ProtectedContent from "../../Account/ProtectedContent";
-import { setQuiz, addQuiz, updateQuiz, deleteQuiz } from "./reducer";
+import { setQuiz, addQuiz } from "./reducer";
 import QuizControls from "./QuizControls";
 import * as courseClient from "../client";
-import * as quizClient from "./client";
 
+// 使用与reducer一致的Quiz接口
 interface Quiz {
   _id: string;
   title: string;
-  description?: string;
-  points: number;
-  timeLimit: number;
-  dueDate: string;
-  availableFromDate: string;
-  availableUntilDate: string;
-  shuffleAnswers: boolean;
-  allowMultipleAttempts: boolean;
-  maxAttempts?: number;
+  description: string;
   course: string;
+  points: number;
+  quizType: 'GRADED_QUIZ' | 'PRACTICE_QUIZ' | 'GRADED_SURVEY' | 'UNGRADED_SURVEY';
+  assignmentGroup: 'QUIZZES' | 'EXAMS' | 'ASSIGNMENTS' | 'PROJECT';
+  published: boolean;
+  timeLimit: number;
+  multipleAttempts: boolean;
+  maxAttempts: number;
+  showCorrectAnswers: boolean;
+  accessCode: string;
+  oneQuestionAtATime: boolean;
+  webcamRequired: boolean;
+  lockQuestionsAfterAnswering: boolean;
+  dueDate: string;
+  availableFrom: string;
+  availableUntil: string;
+  shuffleAnswers: boolean;
+  questions: any[];
+  attempts?: any[];
 }
 
 export default function Quizzes() {
@@ -39,16 +49,25 @@ export default function Quizzes() {
     try {
       const quizData = {
         title: quizName.trim(),
+        description: "Please complete this quiz by the due date.",
         course: cid,
         points: 100,
-        timeLimit: 60,
+        quizType: "GRADED_QUIZ",
+        assignmentGroup: "QUIZZES",
+        published: false,
+        timeLimit: 20,
+        multipleAttempts: false,
+        maxAttempts: 1,
+        showCorrectAnswers: false,
+        accessCode: "",
+        oneQuestionAtATime: true,
+        webcamRequired: false,
+        lockQuestionsAfterAnswering: false,
         dueDate: new Date().toISOString(),
-        availableFromDate: new Date().toISOString(),
-        availableUntilDate: new Date().toISOString(),
-        description: "",
-        shuffleAnswers: false,
-        allowMultipleAttempts: false,
-        maxAttempts: 1
+        availableFrom: new Date().toISOString(),
+        availableUntil: new Date().toISOString(),
+        shuffleAnswers: true,
+        questions: []
       };
       
       const newQuiz = await courseClient.createQuizForCourse(cid, quizData);
@@ -57,24 +76,6 @@ export default function Quizzes() {
     } catch (error) {
       console.error("Failed to create quiz:", error);
       alert("Failed to create quiz. Please check all required fields.");
-    }
-  };
-
-  const updateExistingQuiz = async (quizId: string, updates: Partial<Quiz>) => {
-    try {
-      const updatedQuiz = await quizClient.updateQuiz({ _id: quizId, ...updates });
-      dispatch(updateQuiz(updatedQuiz));
-    } catch (error) {
-      console.error("Failed to update quiz:", error);
-    }
-  };
-
-  const deleteExistingQuiz = async (quizId: string) => {
-    try {
-      await quizClient.deleteQuiz(quizId);
-      dispatch(deleteQuiz(quizId));
-    } catch (error) {
-      console.error("Failed to delete quiz:", error);
     }
   };
 
@@ -94,6 +95,20 @@ export default function Quizzes() {
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
+  };
+
+  const getQuizStatus = (quiz: Quiz) => {
+    const now = new Date();
+    const availableFrom = new Date(quiz.availableFrom);
+    const availableUntil = new Date(quiz.availableUntil);
+
+    if (now < availableFrom) {
+      return `Not available until ${formatDate(quiz.availableFrom)}`;
+    } else if (now > availableUntil) {
+      return "Closed";
+    } else {
+      return "Available";
+    }
   };
 
   return (
@@ -121,6 +136,9 @@ export default function Quizzes() {
                     className="wd-lesson list-group-item p-3 ps-1 d-flex align-items-center justify-content-between">
                   <div>
                     <RxRocket className="me-2 fs-4" />
+                    {quiz.published ? 
+                      <span className="text-success">✓</span> : 
+                      <span className="text-danger">✗</span>}
                   </div>
                   <div id="wd-quiz-list" className="d-flex flex-column flex-grow-1 ms-3">
                     <a className="wd-quiz-link"
@@ -128,31 +146,28 @@ export default function Quizzes() {
                       <b>{quiz.title}</b>
                     </a>
                     <div style={{ fontSize: '1rem' }}>
-                      <span className="text-danger">Multiple Modules</span>
-                      <span className="mx-2">|</span>
-                      <b>Available from</b> {formatDate(quiz.availableFromDate)}
+                      <span className={`${getQuizStatus(quiz) === 'Available' ? 'text-success' : 'text-danger'}`}>
+                        {getQuizStatus(quiz)}
+                      </span>
                       <span className="mx-2">|</span>
                       <b>Due</b> {formatDate(quiz.dueDate)}
                       <span className="mx-2">|</span>
                       {quiz.points} pts
                       <span className="mx-2">|</span>
                       {quiz.timeLimit} minutes
+                      <span className="mx-2">|</span>
+                      {quiz.questions.length} Questions
                     </div>
                   </div>
                   
                   <div>
                     <ProtectedContent>
-                      <div className="d-flex">
-                        <button 
-                          className="btn btn-danger me-2"
-                          onClick={() => deleteExistingQuiz(quiz._id)}
-                        >
-                          Delete
-                        </button>
-                        <button className="btn btn-light">
-                          <i className="fa fa-ellipsis-v"></i>
-                        </button>
-                      </div>
+                      <QuizControls 
+                        quiz={quiz}
+                        setQuizName={setQuizName}
+                        quizName={quizName}
+                        addQuiz={createQuizForCourse}
+                      />
                     </ProtectedContent>
                   </div>
                 </li>
