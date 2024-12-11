@@ -41,7 +41,7 @@ export default function QuizEditor() {
     const fetchQuiz = async () => {
       if (cid && qid) {
         try {
-          const quizzes = await courseClient.findQuizzesForCourse(cid);
+          const quizzes = await quizClient.findQuizzesForCourse(cid);
           const existingQuiz = quizzes.find((q: Quiz) => q._id === qid);
           if (existingQuiz) {
             const formattedQuiz = {
@@ -97,7 +97,7 @@ export default function QuizEditor() {
         const updatedQuiz = await quizClient.updateQuiz(quizData);
         dispatch(addQuiz(updatedQuiz));
       } else {
-        const newQuiz = await courseClient.createQuizForCourse(cid, quizData);
+        const newQuiz = await quizClient.createQuiz(cid, quizData);
         dispatch(addQuiz(newQuiz));
       }
       navigate(`/Kanbas/Courses/${cid}/Quizzes`);

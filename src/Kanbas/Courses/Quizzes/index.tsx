@@ -11,17 +11,28 @@ import * as quizClient from "./client";
 
 interface Quiz {
   _id: string;
-  title: string;
-  description?: string;
-  points: number;
-  timeLimit: number;
-  dueDate: string;
-  availableFromDate: string;
-  availableUntilDate: string;
-  shuffleAnswers: boolean;
-  allowMultipleAttempts: boolean;
-  maxAttempts?: number;
-  course: string;
+    title: string;
+    type: string;
+    description: string;
+    cid: string;
+    points: number;
+    noOfQuestions: number;
+    dueTime: string;
+    availableFrom: string;
+    availableUntil: string;
+    published: boolean;
+    timeLimit: number;
+    shuffleAnswers: boolean;
+    multipleAttempts: boolean;
+    noOfAttempts: number;
+    showCorrectAnswers: string;
+    accessCode: string;
+    oneQuestionataTime: boolean;
+    webCam: boolean;
+    lockQuestions: boolean;
+    group: string;
+    viewResponses: string;
+    viewResult: boolean;
 }
 
 export default function Quizzes() {
@@ -51,7 +62,7 @@ export default function Quizzes() {
         maxAttempts: 1
       };
       
-      const newQuiz = await courseClient.createQuizForCourse(cid, quizData);
+      const newQuiz = await quizClient.createQuiz(cid, quizData);
       dispatch(addQuiz(newQuiz));
       setQuizName("");
     } catch (error) {
@@ -81,7 +92,7 @@ export default function Quizzes() {
   const fetchQuizzes = async () => {
     try {
       if (!cid) return;
-      const fetchedQuizzes = await courseClient.findQuizzesForCourse(cid);
+      const fetchedQuizzes = await quizClient.findQuizzesForCourse(cid);
       dispatch(setQuiz(fetchedQuizzes));
     } catch (error) {
       console.error("Failed to fetch quizzes:", error);
@@ -130,9 +141,9 @@ export default function Quizzes() {
                     <div style={{ fontSize: '1rem' }}>
                       <span className="text-danger">Multiple Modules</span>
                       <span className="mx-2">|</span>
-                      <b>Available from</b> {formatDate(quiz.availableFromDate)}
+                      <b>Available from</b> {formatDate(quiz.availableFrom)}
                       <span className="mx-2">|</span>
-                      <b>Due</b> {formatDate(quiz.dueDate)}
+                      <b>Due</b> {formatDate(quiz.dueTime)}
                       <span className="mx-2">|</span>
                       {quiz.points} pts
                       <span className="mx-2">|</span>
