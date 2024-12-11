@@ -53,8 +53,8 @@ export default function QuizDetail() {
     const dispatch = useDispatch();
     const quiz = useSelector((state: StoreState) => state.quizzesReducer.quiz);
 
-    const togglePublishStatus = async (quizId: string) => {
-        if (!quizId || !quiz) return;
+    const togglePublishStatus = async (qid: string) => {
+        if (!qid || !quiz) return;
         
         try {
             const updatedQuizData = {

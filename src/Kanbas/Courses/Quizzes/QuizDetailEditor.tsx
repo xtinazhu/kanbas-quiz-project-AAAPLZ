@@ -1,9 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams, useNavigate } from "react-router";
-import { selectQuiz } from "./reducer";
-import * as courseClient from "../client";
-import * as quizClient from "./client";
+import React from 'react';
 
 interface Quiz {
   _id?: string;
@@ -29,95 +24,40 @@ interface Quiz {
   questions: any[];
 }
 
-const QuizDetailsEditor = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { cid, qid } = useParams();
-  const [quiz, setQuiz] = useState<Quiz>(() => {
-    // 设置默认值
-    return {
-      title: "New Quiz",
-      description: "Please complete this quiz by the due date.",
-      course: cid || "",
-      points: 100,
-      quizType: "GRADED_QUIZ",
-      assignmentGroup: "QUIZZES",
-      published: false,
-      timeLimit: 20,
-      multipleAttempts: false,
-      maxAttempts: 1,
-      showCorrectAnswers: false,
-      accessCode: "NO_CODE",  // 提供默认值
-      oneQuestionAtATime: true,
-      webcamRequired: false,
-      lockQuestionsAfterAnswering: false,
-      dueDate: new Date().toISOString(),
-      availableFrom: new Date().toISOString(),
-      availableUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-      shuffleAnswers: true,
-      questions: []
-    };
-  });
+interface QuizDetailEditorProps {
+  quiz: Quiz;
+  onQuizChange: (quiz: Quiz) => void;
+  onSave: () => void;
+  onCancel: () => void;
+}
 
-  useEffect(() => {
-    if (qid && qid !== "NewQuiz" && qid !== "undefined") {
-      const loadQuiz = async () => {
-        try {
-          const existingQuiz = await quizClient.findQuizById(qid);
-          if (existingQuiz) {
-            setQuiz(existingQuiz);
-          }
-        } catch (error) {
-          console.error("Failed to load quiz:", error);
-        }
-      };
-      loadQuiz();
-    }
-  }, [qid]);
-
+const QuizDetailsEditor = ({ quiz, onQuizChange, onSave, onCancel }: QuizDetailEditorProps) => {
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target;
     const fieldValue = type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
 
-    setQuiz({
+    onQuizChange({
       ...quiz,
       [name]: fieldValue,
     });
   };
 
+  const formatDateForInput = (dateString: string) => {
+    const date = new Date(dateString);
+    const localDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+      .toISOString()
+      .slice(0, 16);
+    return localDate;
+  };
+  
   const handleDateChange = (name: string, value: string) => {
-    setQuiz({
+    const localDate = new Date(value);
+    onQuizChange({
       ...quiz,
-      [name]: new Date(value).toISOString(),
+      [name]: localDate.toISOString(),
     });
-  };
-
-  const handleSave = async () => {
-    if (!cid) {
-      alert("Course ID is required");
-      return;
-    }
-
-    try {
-      if (qid === "NewQuiz") {
-        // 创建新的 Quiz
-        const newQuiz = await courseClient.createQuizForCourse(cid, quiz);
-        navigate(`/Kanbas/Courses/${cid}/Quizzes/${newQuiz._id}/Detail`);
-      } else {
-        // 更新现有的 Quiz
-        await quizClient.updateQuiz(quiz);
-        navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Detail`);
-      }
-    } catch (error) {
-      console.error("Failed to save quiz:", error);
-      alert("Failed to save quiz. Please check all required fields.");
-    }
-  };
-
-  const handleCancel = () => {
-    navigate(`/Kanbas/Courses/${cid}/Quizzes`);
   };
 
   return (
@@ -326,20 +266,21 @@ const QuizDetailsEditor = () => {
               onChange={handleInputChange}
             />
             <label className="form-check-label" htmlFor="webcamRequired">
-              Webcam Required
+            Webcam Required
             </label>
           </div>
         </div>
 
         <div className="mb-4">
           <h4>Time Settings</h4>
+          
           <div className="mb-3">
             <label htmlFor="dueDate" className="form-label">Due Date</label>
             <input
               type="datetime-local"
               id="dueDate"
               className="form-control"
-              value={new Date(quiz.dueDate).toISOString().slice(0, 16)}
+              value={formatDateForInput(quiz.dueDate)}
               onChange={(e) => handleDateChange("dueDate", e.target.value)}
             />
           </div>
@@ -350,7 +291,8 @@ const QuizDetailsEditor = () => {
               type="datetime-local"
               id="availableFrom"
               className="form-control"
-              value={new Date(quiz.availableFrom).toISOString().slice(0, 16)}
+              /*value={new Date(quiz.availableFrom).toISOString().slice(0, 16)}*/
+              value={formatDateForInput(quiz.availableFrom)}
               onChange={(e) => handleDateChange("availableFrom", e.target.value)}
             />
           </div>
@@ -361,20 +303,26 @@ const QuizDetailsEditor = () => {
               type="datetime-local"
               id="availableUntil"
               className="form-control"
-              value={new Date(quiz.availableUntil).toISOString().slice(0, 16)}
+              
+              value={formatDateForInput(quiz.availableUntil)}
               onChange={(e) => handleDateChange("availableUntil", e.target.value)}
             />
           </div>
         </div>
-
-        <div className="d-flex justify-content-center mb-3">
-          <button className="btn btn-secondary me-2" onClick={handleCancel}>
-            Cancel
-          </button>
-          <button className="btn btn-danger" onClick={handleSave}>
-            Save
-          </button>
-        </div>
+      </div>
+      <div className="d-flex justify-content-center mb-3">
+        <button 
+          className="btn btn-secondary me-2" 
+          onClick={onCancel}
+        >
+          Cancel
+        </button>
+        <button 
+          className="btn btn-danger" 
+          onClick={onSave}
+        >
+          Save
+        </button>
       </div>
     </div>
   );

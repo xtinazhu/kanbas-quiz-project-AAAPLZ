@@ -142,7 +142,7 @@ export default function Quizzes() {
                   </div>
                   <div id="wd-quiz-list" className="d-flex flex-column flex-grow-1 ms-3">
                     <a className="wd-quiz-link"
-                       href={`#/Kanbas/Courses/${cid}/Quizzes/${qid}/detail`}>
+                       href={`#/Kanbas/Courses/${cid}/Quizzes/${quiz._id}/detail`}>
                       <b>{quiz.title}</b>
                     </a>
                     <div style={{ fontSize: '1rem' }}>
