@@ -35,7 +35,7 @@ interface Quiz {
 }
 
 export default function Quizzes() {
-  const { cid } = useParams();
+  const { cid, qid } = useParams();
   const [quizName, setQuizName] = useState("");
   const { quizzes } = useSelector((state: any) => state.quizzesReducer);
   const dispatch = useDispatch();
@@ -142,7 +142,7 @@ export default function Quizzes() {
                   </div>
                   <div id="wd-quiz-list" className="d-flex flex-column flex-grow-1 ms-3">
                     <a className="wd-quiz-link"
-                       href={`#/Kanbas/Courses/${cid}/Quizzes/${quiz._id}`}>
+                       href={`#/Kanbas/Courses/${cid}/Quizzes/${qid}`}>
                       <b>{quiz.title}</b>
                     </a>
                     <div style={{ fontSize: '1rem' }}>

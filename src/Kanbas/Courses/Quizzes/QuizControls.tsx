@@ -104,7 +104,7 @@ export default function QuizControls({
       }
   
       // Use navigate after successful quiz creation
-      navigate(`/Kanbas/Courses/${cid}/Quizzes/${newQuiz._id}/EditDetail`);
+      navigate(`/Kanbas/Courses/${cid}/Quizzes/${newQuiz._id}`);
     } catch (error) {
       console.error("Failed to create quiz:", error);
       alert("Failed to create quiz. Please check your connection and try again.");
@@ -190,7 +190,7 @@ export default function QuizControls({
           <>
             <a 
               className="btn btn-lg btn-danger me-1 float-end"
-              href={`#/Kanbas/Courses/${cid}/Quizzes/${qid}/EditDetail`}
+              href={`#/Kanbas/Courses/${cid}/Quizzes/NewQuiz`}
             >
               <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
               Quiz

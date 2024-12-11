@@ -60,8 +60,7 @@ const QuizDetailsEditor = () => {
   });
 
   useEffect(() => {
-    // 仅当有 qid 且不是 NewQuiz 时加载数据
-    if (qid && qid !== "NewQuiz") {
+    if (qid && qid !== "NewQuiz" && qid !== "undefined") {
       const loadQuiz = async () => {
         try {
           const existingQuiz = await client.findQuizById(qid);
@@ -70,8 +69,6 @@ const QuizDetailsEditor = () => {
           }
         } catch (error) {
           console.error("Failed to load quiz:", error);
-          // 避免弹出过多的错误提示
-          // alert("Failed to load quiz details.");
         }
       };
       loadQuiz();
@@ -107,11 +104,11 @@ const QuizDetailsEditor = () => {
       if (qid === "NewQuiz") {
         // 创建新的 Quiz
         const newQuiz = await courseClient.createQuizForCourse(cid, quiz);
-        navigate(`/Kanbas/Courses/${cid}/Quizzes`);
+        navigate(`/Kanbas/Courses/${cid}/Quizzes/${newQuiz._id}/Detail`);
       } else {
         // 更新现有的 Quiz
         await client.updateQuiz(quiz);
-        navigate(`/Kanbas/Courses/${cid}/Quizzes`);
+        navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Detail`);
       }
     } catch (error) {
       console.error("Failed to save quiz:", error);
