@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router";
 import { selectQuiz } from "./reducer";
 import * as courseClient from "../client";
-import * as client from "./client";
+import * as quizClient from "./client";
 
 interface Quiz {
   _id?: string;
@@ -63,7 +63,7 @@ const QuizDetailsEditor = () => {
     if (qid && qid !== "NewQuiz" && qid !== "undefined") {
       const loadQuiz = async () => {
         try {
-          const existingQuiz = await client.findQuizById(qid);
+          const existingQuiz = await quizClient.findQuizById(qid);
           if (existingQuiz) {
             setQuiz(existingQuiz);
           }
@@ -107,7 +107,7 @@ const QuizDetailsEditor = () => {
         navigate(`/Kanbas/Courses/${cid}/Quizzes/${newQuiz._id}/Detail`);
       } else {
         // 更新现有的 Quiz
-        await client.updateQuiz(quiz);
+        await quizClient.updateQuiz(quiz);
         navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Detail`);
       }
     } catch (error) {
@@ -123,7 +123,6 @@ const QuizDetailsEditor = () => {
   return (
     <div className="container">
       <div className="mb-4">
-        <h2>Quiz Details</h2>
         <div className="form-check mb-3">
           <input
             type="checkbox"
@@ -368,7 +367,7 @@ const QuizDetailsEditor = () => {
           </div>
         </div>
 
-        <div className="mb-3">
+        <div className="d-flex justify-content-center mb-3">
           <button className="btn btn-secondary me-2" onClick={handleCancel}>
             Cancel
           </button>

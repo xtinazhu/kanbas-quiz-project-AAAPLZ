@@ -70,7 +70,7 @@ export default function QuizDetail() {
     };
 
     const handleEdit = () => {
-        navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/EditDetail`);
+        navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}`);
     };
 
     const handlePreview = () => {
@@ -106,9 +106,9 @@ export default function QuizDetail() {
 
     return (
         <div className="flex-fill ms-5 me-5">
-            <div className="d-flex justify-content-between align-items-center">
-                <h2>Quiz: {quiz.title}</h2>
-                <div className="d-flex">
+            <div className="d-flex ">
+                
+                <div className="d-flex float-end">
                     <button
                         className="btn btn-light me-2"
                         onClick={() => quiz._id && togglePublishStatus(quiz._id)}
@@ -148,7 +148,7 @@ export default function QuizDetail() {
             <div className="card">
                 <div className="card-body">
                     <div className="mb-4">
-                        <h5>Description</h5>
+                        <h2>Quiz: {quiz.title}</h2>
                         <p>{quiz.description}</p>
                     </div>
 
