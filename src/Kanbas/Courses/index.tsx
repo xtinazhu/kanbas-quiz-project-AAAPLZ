@@ -4,7 +4,6 @@ import Home from "./Home";
 import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
 import Quizzes from "./Quizzes";
-//import QuizDetailEditor from "./Quizzes/QuizDetailEditor";
 import QuizEditor from "./Quizzes/QuizEditor";
 import QuizDetail from "./Quizzes/QuizDetail";
 import People from "./People";

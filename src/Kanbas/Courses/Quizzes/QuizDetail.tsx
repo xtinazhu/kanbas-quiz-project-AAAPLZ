@@ -152,7 +152,7 @@ export default function QuizDetail() {
                         <p>{quiz.description}</p>
                     </div>
 
-                    <div className="row mb-3">
+                    <div className="row justify-content-center mb-3">
                         <div className="col-md-6">
                             <div className="mb-2">
                                 <strong>Quiz Type:</strong> {quiz.quizType.replace(/_/g, ' ')}
@@ -169,8 +169,7 @@ export default function QuizDetail() {
                             <div className="mb-2">
                                 <strong>Access Code:</strong> {quiz.accessCode || 'None'}
                             </div>
-                        </div>
-                        <div className="col-md-6">
+                        
                             <div className="mb-2">
                                 <strong>Multiple Attempts:</strong> {quiz.multipleAttempts ? `Yes (Max: ${quiz.maxAttempts})` : 'No'}
                             </div>
@@ -193,7 +192,6 @@ export default function QuizDetail() {
                     </div>
 
                     <div className="mt-4">
-                        <h5>Time Settings</h5>
                         <table className="table">
                             <thead>
                                 <tr>

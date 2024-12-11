@@ -6,7 +6,7 @@ import QuizDetailsEditor from "./QuizDetailEditor";
 import * as quizClient from "./client";
 import * as courseClient from "../client";
 import { addQuiz, updateQuiz } from "./reducer";
-import QuizQuestions from "./Questions";
+import QuizQuestionsEditor from "./QuizQuestionEditor";
 
 interface Quiz {
   _id?: string;
@@ -179,7 +179,12 @@ export default function QuizEditor() {
             onCancel={handleCancel}
           />
         ) : (
-          <QuizQuestions />
+          <QuizQuestionsEditor
+            quiz={quizData}
+            onQuizChange={handleQuizChange}
+            onSave={handleSave}
+            onCancel={handleCancel}
+          />
         )}
         <hr />
 
@@ -199,7 +204,7 @@ export default function QuizEditor() {
           </div>*/}
           <div className="d-flex justify-content-center">
             <button 
-              className="btn btn-success me-2"
+              className="btn btn-danger me-2"
               onClick={handleSaveAndPublish}
             >
               Save & Publish

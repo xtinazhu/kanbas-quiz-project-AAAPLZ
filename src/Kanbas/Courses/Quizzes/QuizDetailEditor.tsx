@@ -1,3 +1,5 @@
+//在QuizEditor页面里面，用于编辑quiz的Detail
+
 import React from 'react';
 
 interface Quiz {

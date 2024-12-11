@@ -31,7 +31,7 @@ type Question = MultipleChoiceQuestion | TrueFalseQuestion | FillInBlankQuestion
 interface QuizAttempt {
   userId: string;
   quizId: string;
-  answers: Record<string, any>; // Store answers based on question type
+  answers: Record<string, any>;
   score: number;
   startedAt: string;
   submittedAt?: string;
@@ -66,6 +66,9 @@ interface QuizzesState {
   quizzes: Quiz[];
   quiz: Quiz;
   currentAttempt?: QuizAttempt;
+  selectedQuestionId: string | null;
+  isQuestionEditing: boolean;
+  questionDraft: Question | null;
 }
 
 const initialState: QuizzesState = {
@@ -91,7 +94,10 @@ const initialState: QuizzesState = {
     availableUntil: new Date().toISOString(),
     shuffleAnswers: true,
     questions: []
-  }
+  },
+  selectedQuestionId: null,
+  isQuestionEditing: false,
+  questionDraft: null
 };
 
 const quizzesSlice = createSlice({
@@ -124,6 +130,9 @@ const quizzesSlice = createSlice({
     },
     selectQuiz: (state, action) => {
       state.quiz = action.payload;
+      state.selectedQuestionId = null;
+      state.isQuestionEditing = false;
+      state.questionDraft = null;
     },
     togglePublishQuiz: (state, { payload: quizId }) => {
       state.quizzes = state.quizzes.map((quiz) =>
@@ -132,28 +141,102 @@ const quizzesSlice = createSlice({
           : quiz
       );
     },
-    // New reducers for quiz questions
-    addQuestion: (state, { payload }) => {
-      if (state.quiz._id) {
-        state.quiz.questions.push(payload);
-        state.quizzes = state.quizzes.map(quiz =>
-          quiz._id === state.quiz._id ? state.quiz : quiz
-        );
+    // Question management
+    setSelectedQuestion: (state, { payload: questionId }) => {
+      state.selectedQuestionId = questionId;
+      state.questionDraft = questionId 
+        ? state.quiz.questions.find(q => q._id === questionId) || null
+        : null;
+    },
+    setQuestionEditing: (state, { payload: isEditing }) => {
+      state.isQuestionEditing = isEditing;
+      if (!isEditing) {
+        state.questionDraft = null;
       }
     },
-    updateQuestion: (state, { payload: { questionId, updates } }) => {
-      if (state.quiz._id) {
-        state.quiz.questions = state.quiz.questions.map(question =>
-          question._id === questionId ? { ...question, ...updates } : question
-        );
+    updateQuestionDraft: (state, { payload: updates }) => {
+      if (state.questionDraft) {
+        state.questionDraft = { ...state.questionDraft, ...updates };
+      }
+    },
+    saveQuestion: (state) => {
+      if (state.questionDraft && state.quiz._id) {
+        const updatedQuestion = { ...state.questionDraft } as Question;
+        
+        if (state.selectedQuestionId) {
+          // Update existing question
+          state.quiz.questions = state.quiz.questions.map(question =>
+            question._id === state.selectedQuestionId 
+              ? updatedQuestion
+              : question
+          );
+        } else {
+          // Add new question
+          state.quiz.questions.push(updatedQuestion);
+        }
+        
+        // Update quiz in quizzes array
         state.quizzes = state.quizzes.map(quiz =>
           quiz._id === state.quiz._id ? state.quiz : quiz
         );
+        
+        // Reset editing state
+        state.isQuestionEditing = false;
+        state.questionDraft = null;
       }
+    },
+    cancelQuestionEdit: (state) => {
+      state.isQuestionEditing = false;
+      state.questionDraft = null;
+    },
+    createNewQuestion: (state, { payload: questionType }) => {
+      const newQuestion: Partial<Question> = {
+        _id: new Date().getTime().toString(),
+        title: "New Question",
+        points: 1,
+        question: "",
+        type: questionType,
+      };
+
+      // Add type-specific properties
+      switch (questionType) {
+        case 'MULTIPLE_CHOICE':
+          (newQuestion as MultipleChoiceQuestion).choices = [];
+          break;
+        case 'TRUE_FALSE':
+          (newQuestion as TrueFalseQuestion).correctAnswer = true;
+          break;
+        case 'FILL_IN_BLANK':
+          (newQuestion as FillInBlankQuestion).possibleAnswers = [];
+          break;
+      }
+
+      state.questionDraft = newQuestion as Question;
+      state.selectedQuestionId = null;
+      state.isQuestionEditing = true;
     },
     deleteQuestion: (state, { payload: questionId }) => {
       if (state.quiz._id) {
         state.quiz.questions = state.quiz.questions.filter(q => q._id !== questionId);
+        // Update quiz in quizzes array
+        state.quizzes = state.quizzes.map(quiz =>
+          quiz._id === state.quiz._id ? state.quiz : quiz
+        );
+        // Reset question editing state
+        if (state.selectedQuestionId === questionId) {
+          state.selectedQuestionId = null;
+          state.isQuestionEditing = false;
+          state.questionDraft = null;
+        }
+      }
+    },
+    reorderQuestions: (state, { payload: newQuestionIds }: { payload: string[] }) => {
+      if (state.quiz._id) {
+        const reorderedQuestions = newQuestionIds
+          .map((id: string) => state.quiz.questions.find(q => q._id === id))
+          .filter((q: Question | undefined): q is Question => q !== undefined);
+        
+        state.quiz.questions = reorderedQuestions;
         state.quizzes = state.quizzes.map(quiz =>
           quiz._id === state.quiz._id ? state.quiz : quiz
         );
@@ -170,7 +253,6 @@ const quizzesSlice = createSlice({
       };
       state.currentAttempt = attempt;
       
-      // Add attempt to quiz
       const quiz = state.quizzes.find(q => q._id === quizId);
       if (quiz) {
         quiz.attempts = quiz.attempts || [];
@@ -183,7 +265,6 @@ const quizzesSlice = createSlice({
         state.currentAttempt.score = score;
         state.currentAttempt.submittedAt = new Date().toISOString();
         
-        // Update the attempt in the quiz
         const quiz = state.quizzes.find(q => q._id === state.currentAttempt?.quizId);
         if (quiz?.attempts) {
           quiz.attempts = quiz.attempts.map(attempt => 
@@ -196,7 +277,7 @@ const quizzesSlice = createSlice({
         
         state.currentAttempt = undefined;
       }
-    }
+    },
   },
 });
 
@@ -207,9 +288,14 @@ export const {
   updateQuiz, 
   selectQuiz, 
   togglePublishQuiz,
-  addQuestion,
-  updateQuestion,
+  setSelectedQuestion,
+  setQuestionEditing,
+  updateQuestionDraft,
+  saveQuestion,
+  cancelQuestionEdit,
+  createNewQuestion,
   deleteQuestion,
+  reorderQuestions,
   startQuizAttempt,
   submitQuizAttempt
 } = quizzesSlice.actions;
