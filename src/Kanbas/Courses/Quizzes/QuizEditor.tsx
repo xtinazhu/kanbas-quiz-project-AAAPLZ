@@ -1,90 +1,125 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux";
-import { addQuiz } from "./reducer";
-import * as courseClient from "../client";
+import { FaBan, FaCheckCircle, FaEllipsisV } from "react-icons/fa";
+import { useParams, useNavigate } from "react-router-dom";
+import QuizDetailsEditor from "./QuizDetailEditor";
 import * as quizClient from "./client";
+import * as courseClient from "../client";
+import { addQuiz, updateQuiz } from "./reducer";
+import QuizQuestionsEditor from "./QuizQuestionEditor";
 
 interface Quiz {
   _id?: string;
   title: string;
+  course: string;
   description: string;
   points: number;
+  quizType: 'GRADED_QUIZ' | 'PRACTICE_QUIZ' | 'GRADED_SURVEY' | 'UNGRADED_SURVEY';
+  assignmentGroup: 'QUIZZES' | 'EXAMS' | 'ASSIGNMENTS' | 'PROJECT';
+  published: boolean;
   timeLimit: number;
+  multipleAttempts: boolean;
+  maxAttempts: number;
+  showCorrectAnswers: boolean;
+  accessCode: string;
+  oneQuestionAtATime: boolean;
+  webcamRequired: boolean;
+  lockQuestionsAfterAnswering: boolean;
   dueDate: string;
-  availableFromDate: string;
-  availableUntilDate: string;
+  availableFrom: string;
+  availableUntil: string;
   shuffleAnswers: boolean;
-  allowMultipleAttempts: boolean;
-  maxAttempts?: number;
+  questions: any[];
 }
 
 export default function QuizEditor() {
+  const { cid, qid } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { cid, qid } = useParams();
+  const [view, setView] = useState('details');
+  const [notifyUsers, setNotifyUsers] = useState(false);
 
-  const [quiz, setQuiz] = useState<Quiz>({
-    title: "",
-    description: "Please complete this quiz by the due date. Read each question carefully and select the best answer.",
+  // 将 quiz 状态提升到父组件
+  const [quizData, setQuizData] = useState<Quiz>(() => ({
+    title: "New Quiz",
+    description: "Please complete this quiz by the due date.",
+    course: cid || "",
     points: 100,
-    timeLimit: 60,
-    dueDate: new Date().toISOString().slice(0, 16),
-    availableFromDate: new Date().toISOString().slice(0, 16),
-    availableUntilDate: new Date().toISOString().slice(0, 16),
-    shuffleAnswers: false,
-    allowMultipleAttempts: false,
-    maxAttempts: 1
-  });
+    quizType: "GRADED_QUIZ",
+    assignmentGroup: "QUIZZES",
+    published: false,
+    timeLimit: 20,
+    multipleAttempts: false,
+    maxAttempts: 1,
+    showCorrectAnswers: false,
+    accessCode: "",
+    oneQuestionAtATime: true,
+    webcamRequired: false,
+    lockQuestionsAfterAnswering: false,
+    dueDate: new Date().toISOString(),
+    availableFrom: new Date().toISOString(),
+    availableUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+    shuffleAnswers: true,
+    questions: []
+  }));
 
+  // 加载现有的 quiz 数据
   useEffect(() => {
-    const fetchQuiz = async () => {
-      if (cid && qid) {
+    if (qid && qid !== "NewQuiz" && qid !== "undefined") {
+      const loadQuiz = async () => {
         try {
+<<<<<<< HEAD
           const quizzes = await quizClient.findQuizzesForCourse(cid);
           const existingQuiz = quizzes.find((q: Quiz) => q._id === qid);
+=======
+          const existingQuiz = await quizClient.findQuizById(qid);
+>>>>>>> main
           if (existingQuiz) {
-            const formattedQuiz = {
-              ...existingQuiz,
-              dueDate: new Date(existingQuiz.dueDate).toISOString().slice(0, 16),
-              availableFromDate: new Date(existingQuiz.availableFromDate).toISOString().slice(0, 16),
-              availableUntilDate: new Date(existingQuiz.availableUntilDate).toISOString().slice(0, 16)
-            };
-            setQuiz(formattedQuiz);
+            setQuizData(existingQuiz);
           }
         } catch (error) {
-          console.error("Failed to fetch quiz:", error);
-          alert("Failed to load quiz details.");
+          console.error("Failed to load quiz:", error);
         }
+      };
+      loadQuiz();
+    }
+  }, [qid]);
+
+  const handleQuizChange = (updatedQuiz: Quiz) => {
+    setQuizData(updatedQuiz);
+  };
+
+  const handleSaveAndPublish = async () => {
+    if (!cid) {
+      alert("Course ID is required");
+      return;
+    }
+
+    try {
+      const quizToSave = { ...quizData, published: true };
+      
+      if (qid === "NewQuiz") {
+        const newQuiz = await courseClient.createQuizForCourse(cid, quizToSave);
+        dispatch(addQuiz(newQuiz));
+      } else {
+        const response = await quizClient.updateQuiz(quizToSave);
+        dispatch(updateQuiz(quizToSave));
       }
-    };
-
-    fetchQuiz();
-  }, [cid, qid]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target;
-    const finalValue = type === 'checkbox' 
-      ? (e.target as HTMLInputElement).checked
-      : type === 'number' 
-        ? parseInt(value) 
-        : value;
-
-    setQuiz(prev => ({
-      ...prev,
-      [name]: finalValue
-    }));
+      
+      navigate(`/Kanbas/Courses/${cid}/Quizzes`);
+    } catch (error) {
+      console.error("Failed to save and publish quiz:", error);
+      alert("Failed to save and publish quiz. Please try again.");
+    }
   };
 
   const handleSave = async () => {
-    if (!cid) return;
-    
-    if (!quiz.title.trim()) {
-      alert("Quiz title is required");
+    if (!cid) {
+      alert("Course ID is required");
       return;
     }
-  
     try {
+<<<<<<< HEAD
       const quizData = {
         ...quiz,
         course: cid,
@@ -98,165 +133,104 @@ export default function QuizEditor() {
         dispatch(addQuiz(updatedQuiz));
       } else {
         const newQuiz = await quizClient.createQuiz(cid, quizData);
+=======
+      if (qid === "NewQuiz") {
+        const newQuiz = await courseClient.createQuizForCourse(cid, quizData);
+>>>>>>> main
         dispatch(addQuiz(newQuiz));
+        navigate(`/Kanbas/Courses/${cid}/Quizzes/${newQuiz._id}/detail`);
+      } else {
+        await quizClient.updateQuiz(quizData);
+        dispatch(updateQuiz(quizData));
+        navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/detail`);
       }
-      navigate(`/Kanbas/Courses/${cid}/Quizzes`);
     } catch (error) {
       console.error("Failed to save quiz:", error);
-      alert("Failed to save quiz. Please check all required fields.");
     }
   };
-
+  
   const handleCancel = () => {
     navigate(`/Kanbas/Courses/${cid}/Quizzes`);
   };
 
   return (
-    <div id="wd-quiz-editor" className="kb-margin-right-left kb-padded-bottom-right kb-border-fat">
-      <div className="row">Quiz Name</div>
-      <div className="row">
-        <input 
-          id="wd-quiz-name"
-          name="title"
-          className="col-12 kb-input-height"
-          value={quiz.title}
-          placeholder="Quiz Name"
-          onChange={handleChange}
-        />
-      </div><br />
-      
-      <div className="row">
-        <textarea 
-          id="wd-quiz-description"
-          name="description"
-          className="col-12 kb-textarea-height"
-          value={quiz.description}
-          onChange={handleChange}
-        />
-      </div><br />
-
-      <div className="row">
-        <div className="col-4 kb-textalign-center-right">
-          Points&nbsp;
-        </div>
-        <input 
-          id="wd-points"
-          name="points"
-          type="number"
-          className="col-8 kb-input-height"
-          value={quiz.points}
-          onChange={handleChange}
-        />
-      </div><br />
-
-      <div className="row">
-        <div className="col-4 kb-textalign-center-right">Time Limit (minutes)&nbsp;</div>
-        <input 
-          id="wd-time-limit"
-          name="timeLimit"
-          type="number"
-          className="col-8 kb-input-height"
-          value={quiz.timeLimit}
-          onChange={handleChange}
-        />
-      </div><br />
-
-      <div className="row">
-        <div className="col-4 kb-textalign-center-right">Due Date&nbsp;</div>
-        <input 
-          type="datetime-local"
-          name="dueDate"
-          className="col-8 kb-input-height"
-          value={quiz.dueDate}
-          onChange={handleChange}
-        />
-      </div><br />
-
-      <div className="row">
-        <div className="col-4 kb-textalign-center-right">Available From&nbsp;</div>
-        <input 
-          type="datetime-local"
-          name="availableFromDate"
-          className="col-8 kb-input-height"
-          value={quiz.availableFromDate}
-          onChange={handleChange}
-        />
-      </div><br />
-
-      <div className="row">
-        <div className="col-4 kb-textalign-center-right">Available Until&nbsp;</div>
-        <input 
-          type="datetime-local"
-          name="availableUntilDate"
-          className="col-8 kb-input-height"
-          value={quiz.availableUntilDate}
-          onChange={handleChange}
-        />
-      </div><br />
-
-      <div className="row">
-        <div className="col-4 kb-textalign-center-right">Quiz Options&nbsp;</div>
-        <div className="col-8">
-          <div className="form-check">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              id="shuffleAnswers"
-              name="shuffleAnswers"
-              checked={quiz.shuffleAnswers}
-              onChange={handleChange}
-            />
-            <label className="form-check-label" htmlFor="shuffleAnswers">
-              Shuffle Answers
-            </label>
-          </div>
-          <div className="form-check">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              id="allowMultipleAttempts"
-              name="allowMultipleAttempts"
-              checked={quiz.allowMultipleAttempts}
-              onChange={handleChange}
-            />
-            <label className="form-check-label" htmlFor="allowMultipleAttempts">
-              Allow Multiple Attempts
-            </label>
-          </div>
-          {quiz.allowMultipleAttempts && (
-            <div className="mt-2">
-              <label htmlFor="maxAttempts">Maximum Attempts:&nbsp;</label>
-              <input
-                type="number"
-                id="maxAttempts"
-                name="maxAttempts"
-                className="form-control"
-                value={quiz.maxAttempts}
-                onChange={handleChange}
-                min="1"
-              />
-            </div>
+    <div>
+      <h2>Quiz Editor</h2>
+      <div className="flex-column flex-fill">
+        {/* Top Section */}
+        <div className="d-flex justify-content-end align-items-center">
+          <h5 className="me-3">Points {quizData.points}</h5>
+          {quizData.published ? (
+            <p className="text-success mb-0 me-3">
+              <FaCheckCircle className="me-1" /> Published
+            </p>
+          ) : (
+            <p className="text-secondary mb-0 me-3">
+              <FaBan className="me-1" /> Not Published
+            </p>
           )}
+          <button className="btn btn-light">
+            <FaEllipsisV />
+          </button>
         </div>
-      </div><br />
+        <hr />
 
-      <hr />
-
-      <div>
-        <div id="wd-quiz-controls" className="text-nowrap">
+        {/* Tab Navigation */}
+        <div className="nav nav-tabs mb-3">
           <button 
-            className="btn btn-lg btn-danger me-1 float-end"
-            onClick={handleSave}
+            onClick={() => setView('details')} 
+            className={`btn ${view === 'details' ? 'btn-primary' : 'btn-light'} me-2`}
           >
-            Save
+            Details
           </button>
-
           <button 
-            className="btn btn-lg btn-secondary me-1 float-end"
-            onClick={handleCancel}
+            onClick={() => setView('questions')} 
+            className={`btn ${view === 'questions' ? 'btn-primary' : 'btn-light'}`}
           >
-            Cancel
+            Questions
           </button>
+        </div>
+
+        {/* Content Section */}
+        {view === 'details' ? (
+          <QuizDetailsEditor 
+            quiz={quizData} 
+            onQuizChange={handleQuizChange}
+            onSave={handleSave}
+            onCancel={handleCancel}
+          />
+        ) : (
+          <QuizQuestionsEditor
+            quiz={quizData}
+            onQuizChange={handleQuizChange}
+            onSave={handleSave}
+            onCancel={handleCancel}
+          />
+        )}
+        <hr />
+
+        {/* Footer Section */}
+        <div className="d-flex justify-content-center">
+          {/*<div className="form-check">
+            <input 
+              className="form-check-input" 
+              type="checkbox"
+              id="notifyUsers"
+              checked={notifyUsers}
+              onChange={(e) => setNotifyUsers(e.target.checked)}
+            />
+            <label className="form-check-label" htmlFor="notifyUsers">
+              Notify users this quiz has changed
+            </label>
+          </div>*/}
+          <div className="d-flex justify-content-center">
+            <button 
+              className="btn btn-danger me-2"
+              onClick={handleSaveAndPublish}
+            >
+              Save & Publish
+            </button>
+          </div>
         </div>
       </div>
     </div>

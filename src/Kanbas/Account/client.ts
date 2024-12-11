@@ -60,8 +60,12 @@ export const updateUser = async (user: any) => {
   const response = await axiosWithCredentials.put(`${USERS_API}/${user._id}`, user);
   return response.data;
 };
-export const profile = async () => {
+/*export const profile = async () => {
   const response = await axiosWithCredentials.post(`${USERS_API}/profile`);
+  return response.data;
+};*/
+export const profile = async () => {
+  const response = await axiosWithCredentials.get(`${USERS_API}/profile`);  // 改为 GET 请求
   return response.data;
 };
 export const signout = async () => {
