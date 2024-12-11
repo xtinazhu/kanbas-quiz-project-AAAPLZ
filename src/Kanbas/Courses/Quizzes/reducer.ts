@@ -118,6 +118,9 @@ const quizzesSlice = createSlice({
       state.quizzes = state.quizzes.map((quiz) =>
         quiz._id === action.payload._id ? action.payload : quiz
       );
+      if (state.quiz._id === action.payload._id) {
+        state.quiz = action.payload;
+      }
     },
     selectQuiz: (state, action) => {
       state.quiz = action.payload;
