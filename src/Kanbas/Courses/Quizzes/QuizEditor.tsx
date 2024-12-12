@@ -7,44 +7,23 @@ import * as quizClient from "./client";
 import * as courseClient from "../client";
 import { addQuiz, updateQuiz } from "./reducer";
 import QuizQuestionsEditor from "./QuizQuestionEditor";
-
-interface Quiz {
-  _id?: string;
-  title: string;
-  course: string;
-  description: string;
-  points: number;
-  quizType: 'GRADED_QUIZ' | 'PRACTICE_QUIZ' | 'GRADED_SURVEY' | 'UNGRADED_SURVEY';
-  assignmentGroup: 'QUIZZES' | 'EXAMS' | 'ASSIGNMENTS' | 'PROJECT';
-  published: boolean;
-  timeLimit: number;
-  multipleAttempts: boolean;
-  maxAttempts: number;
-  showCorrectAnswers: boolean;
-  accessCode: string;
-  oneQuestionAtATime: boolean;
-  webcamRequired: boolean;
-  lockQuestionsAfterAnswering: boolean;
-  dueDate: string;
-  availableFrom: string;
-  availableUntil: string;
-  shuffleAnswers: boolean;
-  questions: any[];
-}
+import { Quiz, QuizQuestion } from './types';
 
 export default function QuizEditor() {
   const { cid, qid } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [view, setView] = useState('details');
-  const [notifyUsers, setNotifyUsers] = useState(false);
 
-  // 将 quiz 状态提升到父组件
+  const calculateTotalPoints = (questions: QuizQuestion[]): number => {
+    return questions.reduce((total, question) => total + (question.points || 0), 0);
+  };
+
   const [quizData, setQuizData] = useState<Quiz>(() => ({
     title: "New Quiz",
     description: "Please complete this quiz by the due date.",
     course: cid || "",
-    points: 100,
+    points: 0,
     quizType: "GRADED_QUIZ",
     assignmentGroup: "QUIZZES",
     published: false,
@@ -70,7 +49,12 @@ export default function QuizEditor() {
         try {
           const existingQuiz = await quizClient.findQuizById(qid);
           if (existingQuiz) {
-            setQuizData(existingQuiz);
+            // 加载时更新总分
+            const totalPoints = calculateTotalPoints(existingQuiz.questions);
+            setQuizData({
+              ...existingQuiz,
+              points: totalPoints
+            });
           }
         } catch (error) {
           console.error("Failed to load quiz:", error);
@@ -81,7 +65,12 @@ export default function QuizEditor() {
   }, [qid]);
 
   const handleQuizChange = (updatedQuiz: Quiz) => {
-    setQuizData(updatedQuiz);
+    // 更新时自动计算总分
+    const totalPoints = calculateTotalPoints(updatedQuiz.questions);
+    setQuizData({
+      ...updatedQuiz,
+      points: totalPoints
+    });
   };
 
   const handleSaveAndPublish = async () => {
@@ -91,13 +80,17 @@ export default function QuizEditor() {
     }
 
     try {
-      const quizToSave = { ...quizData, published: true };
+      const quizToSave = { 
+        ...quizData, 
+        published: true,
+        points: calculateTotalPoints(quizData.questions) // 确保使用最新的总分
+      };
       
       if (qid === "NewQuiz") {
         const newQuiz = await courseClient.createQuizForCourse(cid, quizToSave);
         dispatch(addQuiz(newQuiz));
       } else {
-        const response = await quizClient.updateQuiz(quizToSave);
+        await quizClient.updateQuiz(quizToSave);
         dispatch(updateQuiz(quizToSave));
       }
       
@@ -114,13 +107,18 @@ export default function QuizEditor() {
       return;
     }
     try {
+      const quizToSave = {
+        ...quizData,
+        points: calculateTotalPoints(quizData.questions) // 确保使用最新的总分
+      };
+
       if (qid === "NewQuiz") {
-        const newQuiz = await courseClient.createQuizForCourse(cid, quizData);
+        const newQuiz = await courseClient.createQuizForCourse(cid, quizToSave);
         dispatch(addQuiz(newQuiz));
         navigate(`/Kanbas/Courses/${cid}/Quizzes/${newQuiz._id}/detail`);
       } else {
-        await quizClient.updateQuiz(quizData);
-        dispatch(updateQuiz(quizData));
+        await quizClient.updateQuiz(quizToSave);
+        dispatch(updateQuiz(quizToSave));
         navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/detail`);
       }
     } catch (error) {
@@ -190,18 +188,6 @@ export default function QuizEditor() {
 
         {/* Footer Section */}
         <div className="d-flex justify-content-center">
-          {/*<div className="form-check">
-            <input 
-              className="form-check-input" 
-              type="checkbox"
-              id="notifyUsers"
-              checked={notifyUsers}
-              onChange={(e) => setNotifyUsers(e.target.checked)}
-            />
-            <label className="form-check-label" htmlFor="notifyUsers">
-              Notify users this quiz has changed
-            </label>
-          </div>*/}
           <div className="d-flex justify-content-center">
             <button 
               className="btn btn-danger me-2"

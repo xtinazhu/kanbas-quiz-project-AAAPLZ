@@ -1,30 +1,5 @@
-//在QuizEditor页面里面，用于编辑quiz的Detail
-
 import React from 'react';
-
-interface Quiz {
-  _id?: string;
-  title: string;
-  course: string;
-  description: string;
-  points: number;
-  quizType: 'GRADED_QUIZ' | 'PRACTICE_QUIZ' | 'GRADED_SURVEY' | 'UNGRADED_SURVEY';
-  assignmentGroup: 'QUIZZES' | 'EXAMS' | 'ASSIGNMENTS' | 'PROJECT';
-  published: boolean;
-  timeLimit: number;
-  multipleAttempts: boolean;
-  maxAttempts: number;
-  showCorrectAnswers: boolean;
-  accessCode: string;
-  oneQuestionAtATime: boolean;
-  webcamRequired: boolean;
-  lockQuestionsAfterAnswering: boolean;
-  dueDate: string;
-  availableFrom: string;
-  availableUntil: string;
-  shuffleAnswers: boolean;
-  questions: any[];
-}
+import { Quiz, QuizType, AssignmentGroupType } from './types';
 
 interface QuizDetailEditorProps {
   quiz: Quiz;
@@ -117,18 +92,6 @@ const QuizDetailsEditor = ({ quiz, onQuizChange, onSave, onCancel }: QuizDetailE
             <option value="GRADED_SURVEY">Graded Survey</option>
             <option value="UNGRADED_SURVEY">Ungraded Survey</option>
           </select>
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="points" className="form-label">Points</label>
-          <input
-            type="number"
-            id="points"
-            name="points"
-            className="form-control"
-            value={quiz.points}
-            onChange={handleInputChange}
-          />
         </div>
 
         <div className="mb-3">
@@ -268,7 +231,7 @@ const QuizDetailsEditor = ({ quiz, onQuizChange, onSave, onCancel }: QuizDetailE
               onChange={handleInputChange}
             />
             <label className="form-check-label" htmlFor="webcamRequired">
-            Webcam Required
+              Webcam Required
             </label>
           </div>
         </div>
@@ -293,7 +256,6 @@ const QuizDetailsEditor = ({ quiz, onQuizChange, onSave, onCancel }: QuizDetailE
               type="datetime-local"
               id="availableFrom"
               className="form-control"
-              /*value={new Date(quiz.availableFrom).toISOString().slice(0, 16)}*/
               value={formatDateForInput(quiz.availableFrom)}
               onChange={(e) => handleDateChange("availableFrom", e.target.value)}
             />
@@ -305,7 +267,6 @@ const QuizDetailsEditor = ({ quiz, onQuizChange, onSave, onCancel }: QuizDetailE
               type="datetime-local"
               id="availableUntil"
               className="form-control"
-              
               value={formatDateForInput(quiz.availableUntil)}
               onChange={(e) => handleDateChange("availableUntil", e.target.value)}
             />
